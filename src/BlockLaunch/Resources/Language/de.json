@@ -1,0 +1,46 @@
+﻿{
+    "language": "Deutsch",
+    "country": "Deutschland",
+    "country_shortcut": "DE",
+
+    "title": "BlockLaunch v%ver Beta",
+    "main_menu_title": "Hauptmenü",
+    "settings_title": "Einstellungen",
+    "login_title": "Einloggen",
+    "cancel": "Abbrechen",
+    "ok": "OK",
+    "tabpage_home": "Startseite",
+    "tabpage_updates": "News - Updates",
+    "tabpage_logs": "Logs",
+    "tabpage_logs_all": "Alle",
+    "tabpage_logs_blocklaunch": "BlockLaunch",
+    "tabpage_logs_minecraft": "Minecraft",
+
+    "welcome_back": "Willkommen zurück, %player :)",
+    "selected_version": "Ausgewählte Version: %game_ver",
+    "show_uuid": "UUID anzeigen",
+    "version": "Version: ",
+    "profile": "Profil: ",
+    "settings": "Einstellungen",
+    "loginAndPlay": "Einloggen und Spielen",
+    "add_profile": "Profil hinzufügen",
+
+    "log_info": "Info",
+    "log_warning": "Warnung",
+    "log_error": "Fehler",
+    "log_exception": "Ausnahme",
+
+    "refresh_profile": "Profil aktualisieren",
+    "dont_save_password": "Passwort nicht speichern (empfohlen)",
+    "dont_save_password_details": "Wenn du diese Option deaktivierst wird dein Passwort in Klartext gespeichert, wo es ohne Probleme von Spyware o.ä gestohlen werden kann.\nDeaktiviere diese Option nur wenn du dir sicher bist was du tust.",
+    "save_settings": "Einstellungen speichern",
+    "copy_uuid": "Möchtest du die UUID in die Zwischenablage kopieren?",
+    "username": "Username: ",
+    "player_information": "Player Informationen",
+
+    "need_an_account": "Du brauchst einen Account? Klick hier!",
+    "login": "Einloggen",
+    "email": "E-Mail: ",
+    "password": "Passwort: ",
+    "profile_name": "Profil-Name: "
+}

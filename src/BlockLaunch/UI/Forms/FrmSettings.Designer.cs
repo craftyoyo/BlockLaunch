@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSettings));
             this.ckbShowAlpha = new System.Windows.Forms.CheckBox();
             this.ckbShowBeta = new System.Windows.Forms.CheckBox();
@@ -38,13 +39,19 @@
             this.ckbUseFullscreenMode = new System.Windows.Forms.CheckBox();
             this.cmdSaveSettings = new System.Windows.Forms.Button();
             this.ckbAllowLocalVersions = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.comLang = new System.Windows.Forms.ComboBox();
+            this.lblLanguage = new System.Windows.Forms.Label();
+            this.chkDontSavePassword = new System.Windows.Forms.CheckBox();
+            this.toolDetails = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.nudMemory)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ckbShowAlpha
             // 
             this.ckbShowAlpha.AutoSize = true;
-            this.ckbShowAlpha.Location = new System.Drawing.Point(12, 12);
+            this.ckbShowAlpha.Location = new System.Drawing.Point(6, 20);
             this.ckbShowAlpha.Name = "ckbShowAlpha";
             this.ckbShowAlpha.Size = new System.Drawing.Size(149, 17);
             this.ckbShowAlpha.TabIndex = 0;
@@ -54,7 +61,7 @@
             // ckbShowBeta
             // 
             this.ckbShowBeta.AutoSize = true;
-            this.ckbShowBeta.Location = new System.Drawing.Point(12, 35);
+            this.ckbShowBeta.Location = new System.Drawing.Point(6, 43);
             this.ckbShowBeta.Name = "ckbShowBeta";
             this.ckbShowBeta.Size = new System.Drawing.Size(144, 17);
             this.ckbShowBeta.TabIndex = 1;
@@ -64,7 +71,7 @@
             // ckbShowSnapshot
             // 
             this.ckbShowSnapshot.AutoSize = true;
-            this.ckbShowSnapshot.Location = new System.Drawing.Point(12, 58);
+            this.ckbShowSnapshot.Location = new System.Drawing.Point(6, 66);
             this.ckbShowSnapshot.Name = "ckbShowSnapshot";
             this.ckbShowSnapshot.Size = new System.Drawing.Size(167, 17);
             this.ckbShowSnapshot.TabIndex = 2;
@@ -73,7 +80,7 @@
             // 
             // nudMemory
             // 
-            this.nudMemory.Location = new System.Drawing.Point(129, 81);
+            this.nudMemory.Location = new System.Drawing.Point(123, 89);
             this.nudMemory.Maximum = new decimal(new int[] {
             16,
             0,
@@ -86,7 +93,7 @@
             // lblMemory
             // 
             this.lblMemory.AutoSize = true;
-            this.lblMemory.Location = new System.Drawing.Point(12, 83);
+            this.lblMemory.Location = new System.Drawing.Point(6, 91);
             this.lblMemory.Name = "lblMemory";
             this.lblMemory.Size = new System.Drawing.Size(111, 13);
             this.lblMemory.TabIndex = 4;
@@ -95,7 +102,7 @@
             // ckbCheckForUpdates
             // 
             this.ckbCheckForUpdates.AutoSize = true;
-            this.ckbCheckForUpdates.Location = new System.Drawing.Point(211, 12);
+            this.ckbCheckForUpdates.Location = new System.Drawing.Point(205, 20);
             this.ckbCheckForUpdates.Name = "ckbCheckForUpdates";
             this.ckbCheckForUpdates.Size = new System.Drawing.Size(168, 17);
             this.ckbCheckForUpdates.TabIndex = 5;
@@ -105,7 +112,7 @@
             // ckbUseFullscreenMode
             // 
             this.ckbUseFullscreenMode.AutoSize = true;
-            this.ckbUseFullscreenMode.Location = new System.Drawing.Point(211, 35);
+            this.ckbUseFullscreenMode.Location = new System.Drawing.Point(205, 43);
             this.ckbUseFullscreenMode.Name = "ckbUseFullscreenMode";
             this.ckbUseFullscreenMode.Size = new System.Drawing.Size(146, 17);
             this.ckbUseFullscreenMode.TabIndex = 6;
@@ -114,41 +121,91 @@
             // 
             // cmdSaveSettings
             // 
-            this.cmdSaveSettings.Location = new System.Drawing.Point(15, 107);
+            this.cmdSaveSettings.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.cmdSaveSettings.Location = new System.Drawing.Point(15, 62);
             this.cmdSaveSettings.Name = "cmdSaveSettings";
             this.cmdSaveSettings.Size = new System.Drawing.Size(361, 23);
             this.cmdSaveSettings.TabIndex = 7;
             this.cmdSaveSettings.Text = "Einstellungen speichern";
             this.cmdSaveSettings.UseVisualStyleBackColor = true;
+            this.cmdSaveSettings.Click += new System.EventHandler(this.cmdSaveSettings_Click);
             // 
             // ckbAllowLocalVersions
             // 
             this.ckbAllowLocalVersions.AutoSize = true;
-            this.ckbAllowLocalVersions.Location = new System.Drawing.Point(211, 58);
+            this.ckbAllowLocalVersions.Location = new System.Drawing.Point(205, 66);
             this.ckbAllowLocalVersions.Name = "ckbAllowLocalVersions";
             this.ckbAllowLocalVersions.Size = new System.Drawing.Size(152, 17);
             this.ckbAllowLocalVersions.TabIndex = 8;
             this.ckbAllowLocalVersions.Text = "Lokale Versionen erlauben";
             this.ckbAllowLocalVersions.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.ckbShowBeta);
+            this.groupBox1.Controls.Add(this.ckbAllowLocalVersions);
+            this.groupBox1.Controls.Add(this.ckbShowAlpha);
+            this.groupBox1.Controls.Add(this.ckbShowSnapshot);
+            this.groupBox1.Controls.Add(this.ckbUseFullscreenMode);
+            this.groupBox1.Controls.Add(this.nudMemory);
+            this.groupBox1.Controls.Add(this.ckbCheckForUpdates);
+            this.groupBox1.Controls.Add(this.lblMemory);
+            this.groupBox1.Location = new System.Drawing.Point(12, 136);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(462, 211);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Visible = false;
+            // 
+            // comLang
+            // 
+            this.comLang.FormattingEnabled = true;
+            this.comLang.Location = new System.Drawing.Point(76, 12);
+            this.comLang.Name = "comLang";
+            this.comLang.Size = new System.Drawing.Size(293, 21);
+            this.comLang.TabIndex = 10;
+            // 
+            // lblLanguage
+            // 
+            this.lblLanguage.AutoSize = true;
+            this.lblLanguage.Location = new System.Drawing.Point(12, 15);
+            this.lblLanguage.Name = "lblLanguage";
+            this.lblLanguage.Size = new System.Drawing.Size(58, 13);
+            this.lblLanguage.TabIndex = 11;
+            this.lblLanguage.Text = "Language:";
+            // 
+            // chkDontSavePassword
+            // 
+            this.chkDontSavePassword.AutoSize = true;
+            this.chkDontSavePassword.Checked = true;
+            this.chkDontSavePassword.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDontSavePassword.Location = new System.Drawing.Point(15, 39);
+            this.chkDontSavePassword.Name = "chkDontSavePassword";
+            this.chkDontSavePassword.Size = new System.Drawing.Size(248, 17);
+            this.chkDontSavePassword.TabIndex = 12;
+            this.chkDontSavePassword.Text = "Don\'t save password in config file (recommend)";
+            this.toolDetails.SetToolTip(this.chkDontSavePassword, "If you disable this your password is saved as plain text in the config file, wher" +
+        "e it can be stolen easily. \r\nOnly check this if you have a long password.");
+            this.chkDontSavePassword.UseVisualStyleBackColor = true;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(388, 142);
-            this.Controls.Add(this.ckbAllowLocalVersions);
+            this.ClientSize = new System.Drawing.Size(379, 92);
+            this.Controls.Add(this.chkDontSavePassword);
+            this.Controls.Add(this.lblLanguage);
+            this.Controls.Add(this.comLang);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cmdSaveSettings);
-            this.Controls.Add(this.ckbUseFullscreenMode);
-            this.Controls.Add(this.ckbCheckForUpdates);
-            this.Controls.Add(this.lblMemory);
-            this.Controls.Add(this.nudMemory);
-            this.Controls.Add(this.ckbShowSnapshot);
-            this.Controls.Add(this.ckbShowBeta);
-            this.Controls.Add(this.ckbShowAlpha);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmSettings";
             this.Text = "BlockLaunch - v. Alpha - Einstellungen";
+            this.Load += new System.EventHandler(this.FrmSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudMemory)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -165,5 +222,10 @@
         private System.Windows.Forms.CheckBox ckbUseFullscreenMode;
         private System.Windows.Forms.Button cmdSaveSettings;
         private System.Windows.Forms.CheckBox ckbAllowLocalVersions;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ComboBox comLang;
+        private System.Windows.Forms.Label lblLanguage;
+        private System.Windows.Forms.CheckBox chkDontSavePassword;
+        private System.Windows.Forms.ToolTip toolDetails;
     }
 }

@@ -78,15 +78,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="MakarovDev.ExpandCollapsePanel">
+      <HintPath>..\..\..\..\..\Downloads\ExpandCollapsePanel-master\MakarovDev.ExpandCollapsePanel\bin\Debug\MakarovDev.ExpandCollapsePanel.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nUpdate">
-      <HintPath>..\..\..\..\..\Stuff\Entwicklung\Clones\nUpdate\nUpdate\bin\Debug\nUpdate.dll</HintPath>
+    <Reference Include="nUpdate, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Stuff\Entwicklung\nUpdate\0.1.0.0\Alpha 5\nUpdate\nUpdate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -102,16 +107,49 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Base64Manager.cs" />
     <Compile Include="Classes\Download\DownloadManager.cs" />
     <Compile Include="Classes\Download\InfoManager.cs" />
     <Compile Include="Classes\Download\VersionManager.cs" />
+    <Compile Include="Classes\JSON\Api\UsernameToUuid.cs" />
+    <Compile Include="Classes\JSON\Api\UuidToProfile.cs" />
+    <Compile Include="Classes\JSON\Assets.cs" />
     <Compile Include="Classes\JSON\Config.cs" />
+    <Compile Include="Classes\JSON\Login\Authentificate\Authentificate.cs" />
+    <Compile Include="Classes\JSON\Login\Authentificate\AuthentificateObjects.cs" />
+    <Compile Include="Classes\JSON\Login\Authentificate\AuthentificateParameter.cs" />
+    <Compile Include="Classes\JSON\Login\Authentificate\AuthentificationResponse.cs" />
+    <Compile Include="Classes\JSON\Login\Error.cs" />
+    <Compile Include="Classes\JSON\Login\Refresh\Refresh.cs" />
+    <Compile Include="Classes\JSON\Login\Refresh\RefreshParameter.cs" />
+    <Compile Include="Classes\JSON\Login\Refresh\RefreshResponse.cs" />
     <Compile Include="Classes\JSON\Profile.cs" />
     <Compile Include="Classes\JSON\Version.cs" />
-    <Compile Include="Classes\Language\LanguageTemplate.cs" />
+    <Compile Include="Classes\JSON\VersionInformation.cs" />
+    <Compile Include="Classes\Language\Language.cs" />
     <Compile Include="Classes\Launcher\BlockLaunchManager.cs" />
+    <Compile Include="Classes\Minecraft\AssetManager.cs" />
+    <Compile Include="Classes\Minecraft\DownloadManager.cs" />
     <Compile Include="Classes\Minecraft\LaunchManager.cs" />
+    <Compile Include="Classes\Minecraft\LibrarieManager.cs" />
     <Compile Include="Classes\Minecraft\LoginManager.cs" />
+    <None Include="Resources\Language\de.json" />
+    <Compile Include="Classes\Minecraft\NativeManager.cs" />
+    <Compile Include="Classes\Minecraft\VersionManager.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\InfoProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Dialogs\Dialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Dialogs\Dialog.Designer.cs">
+      <DependentUpon>Dialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -134,14 +172,12 @@
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <EmbeddedResource Include="UI\Dialogs\Dialog.resx">
+      <DependentUpon>Dialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\FrmLogin.resx">
       <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
@@ -161,15 +197,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\Language\en.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\DefaultHead.png" />
+    <Content Include="Resources\Collapse.png" />
+    <None Include="Resources\Error.png" />
+    <Content Include="Resources\Expand.png" />
+    <None Include="Resources\Info.png" />
     <Content Include="Resources\MainIcon.ico" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

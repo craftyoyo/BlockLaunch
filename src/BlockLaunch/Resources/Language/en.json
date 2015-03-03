@@ -1,0 +1,46 @@
+﻿{
+    "language": "English",
+    "country": "USA, England & etc...",
+    "country_shortcut": "EN",
+
+    "title": "BlockLaunch v%ver Beta",
+    "main_menu_title": "Main Menu",
+    "settings_title": "Settings",
+    "login_title": "Login",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "tabpage_home": "Home",
+    "tabpage_updates": "News - Updates",
+    "tabpage_logs": "Logs",
+    "tabpage_logs_all": "All",
+    "tabpage_logs_blocklaunch": "BlockLaunch",
+    "tabpage_logs_minecraft": "Minecraft",
+
+    "welcome_back": "Welcome back, %player :)",
+    "selected_version": "Selected Version: %game_ver",
+    "show_uuid": "Show UUID",
+    "version": "Version: ",
+    "profile": "Profile: ",
+    "settings": "Settings",
+    "loginAndPlay": "Login and Play",
+    "add_profile": "Add new profile",
+
+    "log_info": "Info",
+    "log_warning": "Warning",
+    "log_error": "Error",
+    "log_exception": "Exception",
+
+    "refresh_profile": "Refresh profile",
+    "dont_save_password": "Don't save password (recommend)",
+    "dont_save_password_details": "If you disable this your password is saved as plain text in the config file, where it can be stolen easily.\nOnly uncheck this if you know what you do.",
+    "save_settings": "Save settings",
+    "copy_uuid": "Do you want to copy the UUID?",
+    "username": "Username: ",
+    "player_information": "Player Information",
+
+    "need_an_account": "Need an account? Click here!",
+    "login": "Login",
+    "email": "E-Mail: ",
+    "password": "Password: ",
+    "profile_name": "Profile Name: "
+}

@@ -36,14 +36,15 @@
             this.txbPassword = new System.Windows.Forms.TextBox();
             this.txbProfileName = new System.Windows.Forms.TextBox();
             this.lblProfilName = new System.Windows.Forms.Label();
+            this.linkBuyMinecraft = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // cmdLogin
             // 
             this.cmdLogin.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdLogin.Location = new System.Drawing.Point(15, 99);
+            this.cmdLogin.Location = new System.Drawing.Point(15, 103);
             this.cmdLogin.Name = "cmdLogin";
-            this.cmdLogin.Size = new System.Drawing.Size(314, 23);
+            this.cmdLogin.Size = new System.Drawing.Size(467, 23);
             this.cmdLogin.TabIndex = 0;
             this.cmdLogin.Text = "Einloggen";
             this.cmdLogin.UseVisualStyleBackColor = true;
@@ -71,14 +72,14 @@
             // 
             this.txbUser.Location = new System.Drawing.Point(57, 12);
             this.txbUser.Name = "txbUser";
-            this.txbUser.Size = new System.Drawing.Size(272, 20);
+            this.txbUser.Size = new System.Drawing.Size(426, 20);
             this.txbUser.TabIndex = 3;
             // 
             // txbPassword
             // 
             this.txbPassword.Location = new System.Drawing.Point(71, 38);
             this.txbPassword.Name = "txbPassword";
-            this.txbPassword.Size = new System.Drawing.Size(258, 20);
+            this.txbPassword.Size = new System.Drawing.Size(412, 20);
             this.txbPassword.TabIndex = 4;
             this.txbPassword.UseSystemPasswordChar = true;
             // 
@@ -86,9 +87,8 @@
             // 
             this.txbProfileName.Location = new System.Drawing.Point(82, 64);
             this.txbProfileName.Name = "txbProfileName";
-            this.txbProfileName.Size = new System.Drawing.Size(247, 20);
+            this.txbProfileName.Size = new System.Drawing.Size(401, 20);
             this.txbProfileName.TabIndex = 5;
-            this.txbProfileName.UseSystemPasswordChar = true;
             // 
             // lblProfilName
             // 
@@ -99,11 +99,23 @@
             this.lblProfilName.TabIndex = 6;
             this.lblProfilName.Text = "Profil-Name:";
             // 
+            // linkBuyMinecraft
+            // 
+            this.linkBuyMinecraft.AutoSize = true;
+            this.linkBuyMinecraft.Location = new System.Drawing.Point(12, 87);
+            this.linkBuyMinecraft.Name = "linkBuyMinecraft";
+            this.linkBuyMinecraft.Size = new System.Drawing.Size(149, 13);
+            this.linkBuyMinecraft.TabIndex = 7;
+            this.linkBuyMinecraft.TabStop = true;
+            this.linkBuyMinecraft.Text = "Need an account? Click here!";
+            this.linkBuyMinecraft.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkBuyMinecraft_LinkClicked);
+            // 
             // FrmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(341, 134);
+            this.ClientSize = new System.Drawing.Size(495, 136);
+            this.Controls.Add(this.linkBuyMinecraft);
             this.Controls.Add(this.lblProfilName);
             this.Controls.Add(this.txbProfileName);
             this.Controls.Add(this.txbPassword);
@@ -114,7 +126,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmLogin";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BlockLaunch - v. Alpha - Einloggen";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmLogin_FormClosing);
+            this.Load += new System.EventHandler(this.FrmLogin_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -129,5 +144,6 @@
         private System.Windows.Forms.TextBox txbPassword;
         private System.Windows.Forms.TextBox txbProfileName;
         private System.Windows.Forms.Label lblProfilName;
+        private System.Windows.Forms.LinkLabel linkBuyMinecraft;
     }
 }

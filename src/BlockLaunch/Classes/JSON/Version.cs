@@ -14,7 +14,6 @@ namespace BlockLaunch.Classes.JSON
         [JsonProperty("snapshot")]
         public string Snapshot { get; set; }
     }
-
     public class Version
     {
         [JsonProperty("id")]
