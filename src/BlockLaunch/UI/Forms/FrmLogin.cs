@@ -35,16 +35,19 @@ namespace BlockLaunch.UI.Forms
         {
             if (_createProfile)
             {
-                var foundProfile = _profiles.Find(x => x.ProfileName == txbProfileName.Text);
-                if (foundProfile != null)
+                if (_profiles != null)
                 {
-                    var errorDialog = new Dialog(Dialog.StatusMode.Error, "Profile-Name already taken.",
-                        "Profile-Name already taken!", "A profile with the same profile name already exists!",
-                        _language.Ok, _language.Cancel);
-                    errorDialog.ShowDialog();
-                    _cancelOk = true;
-                    return;
-                }
+                    var foundProfile = _profiles.Find(x => x.ProfileName == txbProfileName.Text);
+                    if (foundProfile != null)
+                    {
+                        var errorDialog = new Dialog(Dialog.StatusMode.Error, "Profile-Name already taken.",
+                            "Profile-Name already taken!", "A profile with the same profile name already exists!",
+                            _language.Ok, _language.Cancel);
+                        errorDialog.ShowDialog();
+                        _cancelOk = true;
+                        return;
+                    }
+                }            
             }
             var parameter = new AuthentificateObjects
             {
