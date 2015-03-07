@@ -10,21 +10,22 @@ It also includes most of the features from the original Launcher.
 **It's still in Beta so some features are maybe not available or not finished!**
 
 ### Version
-The current version is 0.1 Beta
+The current version is 0.1.1 Beta
 
 ### Known Issues
 
 My software have bugs like all applications. So here is a list of all (confirmed) bugs:
 
-- Doesn't support Optifine and Forge
+- Doesn't support ~~Optifine~~ and Forge
 - Sometimes the config will be corrupted when closing application.
 
 ### Todo's
 
-- Add support for Optifine and Forge
+- Add support for ~~Optifine~~ (Done) and Forge
 - Add mojang server status information
 - First Startup-Wizard
 - Plugin-System
+- Bugfixes in the solution file to make it buildable
 
 ### Installation & Dependencies
 

@@ -93,7 +93,7 @@ namespace BlockLaunch.Classes.Minecraft
                 }
                 if (skipFile) continue;
                 var libInfo = lib.Name.Split(':');
-                var package = libInfo[0];
+                var package = libInfo[0].Replace(".", @"\");
                 var name = libInfo[1];
                 var version = libInfo[2];
                 var native = "";
