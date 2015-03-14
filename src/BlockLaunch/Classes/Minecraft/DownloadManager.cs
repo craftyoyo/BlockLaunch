@@ -115,32 +115,42 @@ namespace BlockLaunch.Classes.Minecraft
                 if (OnDownloadStarted != null) OnDownloadStarted(this, args);
                 using (var downloader = new WebClient {Proxy = null})
                 {
-                    try
+                    if (FileOnServer(jarWeb))
                     {
-                        downloader.DownloadFile(jarWeb, jarLocal);
-                        if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
-                        args = new DownloadStartedArgs(fileNameSha, "lib_sha");
-                        if (OnDownloadStarted != null) OnDownloadStarted(this, args);
-                        downloader.DownloadFile(shaWeb, shaLocal);
-                        endArgs = new DownloadFinishedArgs(downloadedFiles + 1, count);
-                        if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
-                    }
-                    catch (WebException)
-                    {
-                        if (File.Exists(jarLocal))
+                        try
                         {
-                            var fail = new DownloadStartedArgs(
-                                "Couldn't download " + jarWeb + " but local copy exists!", "failed_can_continue");
-                            if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
-                            continue;
+                            downloader.DownloadFile(jarWeb, jarLocal);
+                            if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
+                            args = new DownloadStartedArgs(fileNameSha, "lib_sha");
+                            if (OnDownloadStarted != null) OnDownloadStarted(this, args);
+                            downloader.DownloadFile(shaWeb, shaLocal);
+                            endArgs = new DownloadFinishedArgs(downloadedFiles + 1, count);
+                            if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
                         }
-                        else
+                        catch (WebException)
                         {
                             var fail = new DownloadStartedArgs(
-                                "Couldn't download " + jarWeb, "failed");
+                                    "Couldn't download " + jarWeb, "failed");
                             if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
                             break;
                         }
+                    }
+                    else
+                    {
+                            if (File.Exists(jarLocal))
+                            {
+                                var fail = new DownloadStartedArgs(
+                                    "Couldn't download " + jarWeb + " but local copy exists!", "failed_can_continue");
+                                if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
+                                continue;
+                            }
+                            else
+                            {
+                                var fail = new DownloadStartedArgs(
+                                    "Couldn't download " + jarWeb, "failed");
+                                if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
+                                break;
+                            }
                     }
                     
                 }
@@ -170,6 +180,22 @@ namespace BlockLaunch.Classes.Minecraft
                 downloader.DownloadFile(webPath, localPath);
                 if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
                 downloadedFiles++;
+            }
+        }
+
+        private bool FileOnServer(string url)
+        {
+            var request = (HttpWebRequest) WebRequest.Create(url);
+            request.Method = "HEAD";
+            request.Timeout = 3000;
+            try
+            {
+                request.GetResponse();
+                return true;
+            }
+            catch (WebException)
+            {
+                return false;
             }
         }
     }

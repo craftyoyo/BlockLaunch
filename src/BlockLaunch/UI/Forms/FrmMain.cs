@@ -61,7 +61,8 @@ namespace BlockLaunch.UI.Forms
             set
             {
                 _config = value;
-                Manager.SaveConfig(_config);
+                if(value != null)
+                    Manager.SaveConfig(_config);
             }
         }
 
@@ -662,7 +663,7 @@ namespace BlockLaunch.UI.Forms
             {
                 if (baseKey == null) return null;
                 var currentVersion = baseKey.GetValue("CurrentVersion").ToString();
-                using (var homeKey = baseKey.OpenSubKey(currentVersion))
+                using (var homeKey = baseKey.OpenSubKey(currentVersion))  // devil number line >:D
                     if (homeKey != null) return homeKey.GetValue("JavaHome") + @"\bin\javaw.exe";
             }
             return null;
@@ -704,7 +705,7 @@ namespace BlockLaunch.UI.Forms
                     SetDownloadProgressBarText("Downloading librarie " + e.DownloadedFile);
                     break;
                 case "lib_sha":
-                    SetDownloadProgressBarText("Downloading SHA1 Hash from librarie " + e.DownloadedFile); // devil number line >:D
+                    SetDownloadProgressBarText("Downloading SHA1 Hash from librarie " + e.DownloadedFile);
                     break;
                 case "failed_can_continue":
                     AppendMinecraftLog(e.DownloadedFile);

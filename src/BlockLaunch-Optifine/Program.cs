@@ -2,13 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Mime;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -41,6 +36,7 @@ namespace BlockLaunch_Optifine
             var dest = Environment.CurrentDirectory + @"\" + string.Format(@"minecraft\versions\{0}", _output2);
             DirectoryCopy(src, dest, false);
             CreateFiles(args[0]);
+            UpdateJar(_output1, _output2, src + @"\" + _output1 + ".jar", args[0]);
             UpdateJson(_output1, _output2);
         }
 
@@ -138,7 +134,7 @@ namespace BlockLaunch_Optifine
             return null;
         }
 
-        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+        private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs, bool overrideFile = true)
         {
  
             var dir = new DirectoryInfo(sourceDirName);
@@ -162,14 +158,53 @@ namespace BlockLaunch_Optifine
             foreach (var file in files)
             {
                 var temppath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(temppath, false);
+                file.CopyTo(temppath, overrideFile);
             }
             if (copySubDirs)
             {
                 foreach (var subdir in dirs)
                 {
                     var temppath = Path.Combine(destDirName, subdir.Name);
-                    DirectoryCopy(subdir.FullName, temppath, true);
+                    DirectoryCopy(subdir.FullName, temppath, true, overrideFile);
+                }
+            }
+        }
+
+        private static void DirectoryMove(string sourceDirName, string destDirName, bool copySubDirs)
+        {
+            var dir = new DirectoryInfo(sourceDirName);
+            if (!dir.Exists) return;
+            var dirs = dir.GetDirectories();
+
+            if (!dir.Exists)
+            {
+                throw new DirectoryNotFoundException(
+                    "Source directory does not exist or could not be found: "
+                    + sourceDirName);
+            }
+
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            var files = dir.GetFiles();
+
+            foreach (var file in files)
+            {
+                var temppath = Path.Combine(destDirName, file.Name);
+                if (File.Exists(temppath))
+                {
+                    File.Delete(temppath);
+                }
+                file.MoveTo(temppath);
+            }
+            if (copySubDirs)
+            {
+                foreach (var subdir in dirs)
+                {
+                    var temppath = Path.Combine(destDirName, subdir.Name);
+                    DirectoryMove(subdir.FullName, temppath, true);
                 }
             }
         }
@@ -187,6 +222,60 @@ namespace BlockLaunch_Optifine
             var fi = new FileInfo(file);
             Directory.CreateDirectory(@"minecraft\libraries\optifine\OptiFine\" + versionFolder);
             fi.CopyTo(@"minecraft\libraries\optifine\OptiFine\" + versionFolder + @"\" + versionFile + ".jar");
+        }
+
+        private static void UpdateJar(string oldVersion, string newVersion, string oldFile, string newFile)
+        {
+            if (!Directory.Exists(Environment.CurrentDirectory + @"\" +
+                                 string.Format(@"minecraft\versions\{0}", newVersion)))
+            {
+                Directory.CreateDirectory(Environment.CurrentDirectory + @"\" +
+                                          string.Format(@"minecraft\versions\{0}", newVersion));
+            }
+            Console.WriteLine("Applying JAR changes...");
+            Directory.CreateDirectory(@"work\" + oldVersion);
+            Directory.CreateDirectory(@"work\" + newVersion);
+            ExtractJar(oldFile, @"work\" + oldVersion);
+            ExtractJar(newFile, @"work\" + newVersion);
+            DirectoryMove(@"work\" + newVersion, @"work\" + oldVersion, false);
+            CreateJar(@"work\" + oldVersion, @"work\" + newVersion + ".jar");
+        }
+
+        private static void ExtractJar(string file, string destionation)
+        {
+            if (!Directory.Exists(destionation))
+            {
+                Directory.CreateDirectory(destionation);
+            }
+            var fz = new FastZip();
+            Console.WriteLine("Extracting jar file " + file);
+            fz.ExtractZip(file, destionation, "");
+        }
+
+        private static void CreateJar(string sourceFolder, string jar)
+        {
+            var files = Directory.GetFiles(sourceFolder, "*.*", SearchOption.AllDirectories);
+            using (var s = new ZipOutputStream(File.Create(jar)))
+            {
+                s.SetLevel(9);
+                var buffer = new byte[4096];
+                foreach (var file in files)
+                {
+                    var entry = new ZipEntry(Path.GetFileName(file)) {DateTime = DateTime.Now};
+                    s.PutNextEntry(entry);
+                    using (var fs =  File.OpenRead(file))
+                    {
+                        int sourceBytes;
+                        do
+                        {
+                            sourceBytes = fs.Read(buffer, 0, buffer.Length);
+                            s.Write(buffer, 0, sourceBytes);
+                        } while (sourceBytes > 0);
+                    }
+                }
+                s.Finish();
+                s.Close();
+            }
         }
 
         private static void UpdateJson(string oldVersion, string newVersion)
@@ -214,11 +303,13 @@ namespace BlockLaunch_Optifine
             var newJson = JsonConvert.SerializeObject(json, Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
             File.WriteAllText(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}\{0}.json", newVersion), newJson);
-            File.Move(_file, Environment.CurrentDirectory + @"\" + string.Format(@"minecraft\versions\{0}\{0}.jar", newVersion));
+            File.Move(@"work\" + _output2 + ".jar", Environment.CurrentDirectory + @"\" +
+                                 string.Format(@"minecraft\versions\{0}\{0}.jar", newVersion));
             File.Delete(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}\{1}.json", newVersion,oldVersion));
             File.Delete(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}\{1}.jar", newVersion, oldVersion));
+            Directory.Delete(@"work", true);
         }
     }
 }
