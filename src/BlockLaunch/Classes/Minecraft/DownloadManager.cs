@@ -108,11 +108,6 @@ namespace BlockLaunch.Classes.Minecraft
                 var shaWeb = new List<string>(downloadPaths.Values)[i];
                 var fileNameJar = jarLocal.Split('\\').Last();
                 var fileNameSha = shaLocal.Split('\\').Last();
-                //if (File.Exists(jarLocal))
-                //{
-                //    File.Delete(jarLocal);
-                //    File.Delete(shaLocal);
-                //}
                 var fi = new FileInfo(jarLocal);
                 if (fi.DirectoryName != null) Directory.CreateDirectory(fi.DirectoryName);
                 var args = new DownloadStartedArgs(fileNameJar, "lib");
@@ -130,9 +125,8 @@ namespace BlockLaunch.Classes.Minecraft
                         endArgs = new DownloadFinishedArgs(downloadedFiles + 1, count);
                         if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
                     }
-                    catch (WebException ex)
+                    catch (WebException)
                     {
-                        Debug.Write("w");
                         if (File.Exists(jarLocal))
                         {
                             var fail = new DownloadStartedArgs(

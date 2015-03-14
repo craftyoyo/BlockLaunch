@@ -598,7 +598,7 @@ namespace BlockLaunch.UI.Forms
                 if (_cancel)
                 {
                     _cancel = false;
-                    var error = new Dialog(Dialog.StatusMode.Error, "Faild to download minecraft",
+                    var error = new Dialog(Dialog.StatusMode.Error, "Failed to download minecraft",
                         "An error occured while downloading minecraft!",
                         "Server is not available or you don't have internet connection!", ApplicationLanguage.Ok,
                         ApplicationLanguage.Cancel);
