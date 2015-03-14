@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -107,11 +108,11 @@ namespace BlockLaunch.Classes.Minecraft
                 var shaWeb = new List<string>(downloadPaths.Values)[i];
                 var fileNameJar = jarLocal.Split('\\').Last();
                 var fileNameSha = shaLocal.Split('\\').Last();
-                if (File.Exists(jarLocal))
-                {
-                    File.Delete(jarLocal);
-                    File.Delete(shaLocal);
-                }
+                //if (File.Exists(jarLocal))
+                //{
+                //    File.Delete(jarLocal);
+                //    File.Delete(shaLocal);
+                //}
                 var fi = new FileInfo(jarLocal);
                 if (fi.DirectoryName != null) Directory.CreateDirectory(fi.DirectoryName);
                 var args = new DownloadStartedArgs(fileNameJar, "lib");
@@ -119,13 +120,35 @@ namespace BlockLaunch.Classes.Minecraft
                 if (OnDownloadStarted != null) OnDownloadStarted(this, args);
                 using (var downloader = new WebClient {Proxy = null})
                 {
-                    downloader.DownloadFile(jarWeb, jarLocal);
-                    if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
-                    args = new DownloadStartedArgs(fileNameSha, "lib_sha");
-                    if (OnDownloadStarted != null) OnDownloadStarted(this, args);
-                    downloader.DownloadFile(shaWeb, shaLocal);
-                    endArgs = new DownloadFinishedArgs(downloadedFiles + 1, count);
-                    if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
+                    try
+                    {
+                        downloader.DownloadFile(jarWeb, jarLocal);
+                        if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
+                        args = new DownloadStartedArgs(fileNameSha, "lib_sha");
+                        if (OnDownloadStarted != null) OnDownloadStarted(this, args);
+                        downloader.DownloadFile(shaWeb, shaLocal);
+                        endArgs = new DownloadFinishedArgs(downloadedFiles + 1, count);
+                        if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
+                    }
+                    catch (WebException ex)
+                    {
+                        Debug.Write("w");
+                        if (File.Exists(jarLocal))
+                        {
+                            var fail = new DownloadStartedArgs(
+                                "Couldn't download " + jarWeb + " but local copy exists!", "failed_can_continue");
+                            if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
+                            continue;
+                        }
+                        else
+                        {
+                            var fail = new DownloadStartedArgs(
+                                "Couldn't download " + jarWeb, "failed");
+                            if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
+                            break;
+                        }
+                    }
+                    
                 }
                 
                 downloadedFiles += 2;

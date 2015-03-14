@@ -18,6 +18,7 @@ namespace BlockLaunch_Optifine
     public class Program
     {
         private static readonly AutoResetEvent VersionFound = new AutoResetEvent(false);
+        private static string _file;
 
         public  static void Main(string[] args)
         {
@@ -34,9 +35,10 @@ namespace BlockLaunch_Optifine
                 Console.ReadKey();
                 return;
             }
+            _file = args[0];
             Console.WriteLine("Copy vanilla version...");
-            var src = AppDomain.CurrentDomain.BaseDirectory + string.Format(@"minecraft\versions\{0}", _output1);
-            var dest = AppDomain.CurrentDomain.BaseDirectory + string.Format(@"minecraft\versions\{0}", _output2);
+            var src = Environment.CurrentDirectory + @"\" + string.Format(@"minecraft\versions\{0}", _output1);
+            var dest = Environment.CurrentDirectory + @"\" + string.Format(@"minecraft\versions\{0}", _output2);
             DirectoryCopy(src, dest, false);
             CreateFiles(args[0]);
             UpdateJson(_output1, _output2);
@@ -189,31 +191,34 @@ namespace BlockLaunch_Optifine
 
         private static void UpdateJson(string oldVersion, string newVersion)
         {
-            if(!Directory.Exists(AppDomain.CurrentDomain.BaseDirectory +
+            if(!Directory.Exists(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}", newVersion)))
             {
-                Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory +
+                Directory.CreateDirectory(Environment.CurrentDirectory + @"\" +
                                           string.Format(@"minecraft\versions\{0}", newVersion));
             }
             Console.WriteLine("Read JSON file from old version...");
             var fileContent =
-                File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +
+                File.ReadAllText(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}\{0}.json", oldVersion));
             Console.WriteLine("Patching JSON...");
             var json = JsonConvert.DeserializeObject<VersionInformation>(fileContent);
             json.Id = newVersion;
             json.MainClass = "net.minecraft.launchwrapper.Launch";
             var lib = new Libraries {Name = "net.minecraft:launchwrapper:1.7"};
+            var id = _output2.Replace("OptiFine_", "");
+            var optifine = new Libraries {Name = "optifine:OptiFine:" + id};
+            json.Librarieses.Add(optifine);
             json.Librarieses.Add(lib);
             json.ArgumentTemplate = json.ArgumentTemplate + " --tweakClass optifine.OptiFineTweaker";
             var newJson = JsonConvert.SerializeObject(json, Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore});
-            File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory +
+            File.WriteAllText(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}\{0}.json", newVersion), newJson);
-            File.Move(AppDomain.CurrentDomain.BaseDirectory + string.Format(@"minecraft\versions\{0}\{1}.jar", oldVersion ,newVersion), AppDomain.CurrentDomain.BaseDirectory + string.Format(@"minecraft\versions\{0}\{0}.jar", newVersion));
-            File.Delete(AppDomain.CurrentDomain.BaseDirectory +
+            File.Move(_file, Environment.CurrentDirectory + @"\" + string.Format(@"minecraft\versions\{0}\{0}.jar", newVersion));
+            File.Delete(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}\{1}.json", newVersion,oldVersion));
-            File.Delete(AppDomain.CurrentDomain.BaseDirectory +
-                                 string.Format(@"minecraft\versions\{0}\{1}.json", newVersion, oldVersion));
+            File.Delete(Environment.CurrentDirectory + @"\" +
+                                 string.Format(@"minecraft\versions\{0}\{1}.jar", newVersion, oldVersion));
         }
     }
 }

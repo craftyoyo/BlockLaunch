@@ -35,7 +35,7 @@ namespace BlockLaunch.Classes.Minecraft
                 }
                 if (skipFile) continue;
                 var libInfo = lib.Name.Split(':');
-                var package = libInfo[0];
+                var package = libInfo[0].Replace(".", @"\");
                 var name = libInfo[1];
                 var version = libInfo[2];
                 var native = string.Empty;
@@ -63,6 +63,7 @@ namespace BlockLaunch.Classes.Minecraft
             var natives = Natives(versionInformation.Librarieses);
             var folder = AppDomain.CurrentDomain.BaseDirectory + @"minecraft\versions\" + versionInformation.Id + @"\" +
                          versionInformation.Id + @"-natives-" + CurrentTimeString();
+            Directory.CreateDirectory(folder);
             foreach (var native in natives)
             {
                 ExtractJar(native, folder);

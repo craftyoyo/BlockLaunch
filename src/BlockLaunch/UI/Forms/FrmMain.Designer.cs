@@ -36,6 +36,7 @@ namespace BlockLaunch.UI.Forms
             this.cmdShowUUID = new System.Windows.Forms.Button();
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tbpMain = new System.Windows.Forms.TabPage();
+            this.pgbDownload = new BlockLaunch.UI.Controls.InfoProgressBar();
             this.cmdRefreshProfile = new System.Windows.Forms.Button();
             this.cmdSettings = new System.Windows.Forms.Button();
             this.cmdAddProfil = new System.Windows.Forms.Button();
@@ -57,7 +58,6 @@ namespace BlockLaunch.UI.Forms
             this.rtbLogMinecraft = new System.Windows.Forms.RichTextBox();
             this.status = new System.Windows.Forms.StatusStrip();
             this.tslMain = new System.Windows.Forms.ToolStripStatusLabel();
-            this.pgbDownload = new BlockLaunch.UI.Controls.InfoProgressBar();
             this.tbcMain.SuspendLayout();
             this.tbpMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
@@ -132,6 +132,17 @@ namespace BlockLaunch.UI.Forms
             this.tbpMain.Size = new System.Drawing.Size(1000, 679);
             this.tbpMain.TabIndex = 0;
             this.tbpMain.Text = "Startseite";
+            // 
+            // pgbDownload
+            // 
+            this.pgbDownload.CustomText = "";
+            this.pgbDownload.Location = new System.Drawing.Point(6, 570);
+            this.pgbDownload.Name = "pgbDownload";
+            this.pgbDownload.Size = new System.Drawing.Size(986, 30);
+            this.pgbDownload.TabIndex = 15;
+            this.pgbDownload.TextFont = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pgbDownload.TextProgressMode = BlockLaunch.UI.Controls.ProgressMode.CustomText;
+            this.pgbDownload.Visible = false;
             // 
             // cmdRefreshProfile
             // 
@@ -343,17 +354,6 @@ namespace BlockLaunch.UI.Forms
             // 
             this.tslMain.Name = "tslMain";
             this.tslMain.Size = new System.Drawing.Size(0, 17);
-            // 
-            // pgbDownload
-            // 
-            this.pgbDownload.CustomText = "";
-            this.pgbDownload.Location = new System.Drawing.Point(6, 570);
-            this.pgbDownload.Name = "pgbDownload";
-            this.pgbDownload.Size = new System.Drawing.Size(986, 30);
-            this.pgbDownload.TabIndex = 15;
-            this.pgbDownload.TextFont = new System.Drawing.Font("Arial", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pgbDownload.TextProgressMode = BlockLaunch.UI.Controls.ProgressMode.CustomText;
-            this.pgbDownload.Visible = false;
             // 
             // FrmMain
             // 

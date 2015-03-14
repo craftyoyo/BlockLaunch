@@ -27,7 +27,7 @@ namespace BlockLaunch.UI.Forms
         #region Values
 
         public static BlockLaunchManager Manager = BlockLaunchManager.Instance;
-        public static Config ApplicationConfig;
+        private static Config _config;
         public static Language ApplicationLanguage;
         public static List<Language> AvailableLanguages;
         public static List<Profile> AvailableProfiles;
@@ -54,6 +54,17 @@ namespace BlockLaunch.UI.Forms
         private bool _playerCachedForThisSession;
 
         private readonly UpdateManager _updater = new UpdateManager(new Uri("http://kaskade-dev.cwsurf.de/projects/blocklaunch/updates.json"), "<RSAKeyValue><Modulus>wUv6rCdDcaZA4reehYFfZblqa5AVxs8ODyRTNgq2v/aGtiUqY8VSd1rBjRlPjUQY87sDq9T0KZWaOJMQRIxsva5IGrfhf917wA300Db7WudKvVfGQsBb0ng834C0WpNxRDhMtfa4HeDA9YuGUJITPotxgJ6rvrZrkqjUH4RXVkf+4Yy/6dBtOlozxO12xd8fGbNCHa4vsfyI1uKikiFyO0r4h8uzY+x3Fs9O30vuTUOewJrEWlBBodm/BvmiuYbOprsINckGhcLeX4Nq40hoSB0caPXFr1tBcGSS/sQ4z8yOkacWMixHImToecABy+tGVXP4S2xu2yf4IRx0dJLg2y6/vpEl6/2829IvrsVIAJI8Y5X/uFrZweitwKhBRN1OaNa3dTAluEVqBHwAkr0A7fmZsv4Q48KpmHlClnqwW3qscPT59j7WUHUV+Cs2qL1rBHmBhWkHL9oSUA04ztCA6a6pz2D/5Hcs5MYXrS+Im6LdK0C2QG9OrJXZ3W7yTmA3ObDSWuOgT8s+DDof1yMePySAQmHDgklx76mDQ2GFJpjC2o5YH5XpoTMrH5yjvbh6GF2ojSkM5z504I9T0CyfLBRyz7Rydh9FtS5jEwWcp014X5c16LkFF+g4AtxMaFGk3NXIomqlLaUH9d7ON21j5T9nEAqpZLWz0WEauFzIDzPtOLDOvScsqlJl4ekWg4skF2ccVeaVPf03AIx+mmCU1Z4oHdqVTHB9V6vVeAbghwze+Fm9Fh/t2ApxBZIw08cKyXp+LQF0U7856b5aOkQbeM32o2PvCFqf7oa18bHTBLcMziv0OVmQK2gGAsK/LMZRmdfsHVmIatVzEv/q3nZ5uhOGhxYUYImqmZqWUP07IJMEWNc/J4/PLLQZtNG9SABNZnDKFm5Ii5eDpGBW5rA6IDmqZjK1qArFQFFhgc7sPxTucErTT6WlmS1zgZV0imqy44kuZxEQEgffD2HU0F78xI3rBwY5+rcwNYiIqysXRxCuyfD4rP24ruOBCJboY6pV5xJRUhQ1cxgGJ/NYB3F7n8f/RcWgVgFvh5BgZijOoGIrMu1YmZ39PUBmh2qdtmloySQzXfh5j81JTvBQLosJxq0DrFVoBNyiymcUyZkK76sUKd1c97NRF4R/opnNWD6PmgP2VP+h9GGmJQMEfRBkMT818JdLgBHY5xVcrn/+xZVxrxi4+gF7Ahu+EzXt8DPVAKqaHjeoV1oRCczMQCuJNS0Eyivnz68p/UfhD7cWyV7TrCYcN4ONv0jIA2qNIBiomtQxXIiP7XB+9EHQxvxvlQ0DgBySwK3nds1wLCjnQTBoTKyEizKi75J8iKwA8gXqWQpSQ/H3rGJ9cmrRFmhgHw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>", new UpdateVersion("0.1.2.0b1"), new CultureInfo("de-DE"));
+
+        public static Config ApplicationConfig
+        {
+            get { return _config; }
+            set
+            {
+                _config = value;
+                Manager.SaveConfig(_config);
+            }
+        }
+
 
         #endregion
 
@@ -113,6 +124,7 @@ namespace BlockLaunch.UI.Forms
                 ApplicationLanguage);
             AppendBlocklaunchLog(message);
             LoadVersions();
+            LoadCustomVersions();
             message = Manager.LogMessage("Loading profiles...", BlockLaunchManager.LogMode.Information, true,
                 ApplicationLanguage);
             AppendBlocklaunchLog(message);
@@ -126,12 +138,16 @@ namespace BlockLaunch.UI.Forms
             _initializing = false;
         }
 
-        private static void ChangeProfile(ref Profile profile)
+        private void ChangeProfile(ref Profile profile)
         {
             var login = new FrmLogin(ApplicationLanguage, AvailableProfiles, false, profile);
             login.ShowDialog();
             profile.CachedUsername = login.UserProfile.CachedUsername;
             profile.AccessToken = login.UserProfile.AccessToken;
+            profile.Password = login.UserProfile.Password;
+            if (OnProfileChanged != null) OnProfileChanged();
+            Manager.SaveProfiles(AvailableProfiles);
+            ApplicationConfig.SelectedProfile = profile;
         }
 
         private void CreateNewProfile()
@@ -281,15 +297,17 @@ namespace BlockLaunch.UI.Forms
             if (ApplicationConfig.SelectedProfile == null)
             {
                 ApplicationConfig.SelectedProfile = profiles.First();
-                Manager.SaveConfig(ApplicationConfig);
             }
             AvailableProfiles = profiles;
             if (!ApplicationConfig.SavePassword && !_playerCachedForThisSession)
             {
                 var profile = ApplicationConfig.SelectedProfile;
                 ChangeProfile(ref profile);
-                ApplicationConfig.SelectedProfile = profile;
-                if (OnProfileChanged != null) OnProfileChanged();
+            }
+            else if (ApplicationConfig.SavePassword && ApplicationConfig.SelectedProfile.Password == null)
+            {
+                var profile = ApplicationConfig.SelectedProfile;
+                ChangeProfile(ref profile);
             }
 
             if (AvailableProfiles != null)
@@ -508,37 +526,48 @@ namespace BlockLaunch.UI.Forms
             var result = loginManager.Refresh(args);
             if (!result.Status)
             {
-                if (result.Error.ErrorString == "ForbiddenOperationException")
+                if (ApplicationConfig.SavePassword && ApplicationConfig.SelectedProfile.Password != null)
                 {
-                    var message = Manager.LogMessage("Invalid session. User need to login.",
-                        BlockLaunchManager.LogMode.Warning, true, ApplicationLanguage);
-                    AppendBlocklaunchLog(message);
-                    var profile = ApplicationConfig.SelectedProfile;
-                    ChangeProfile(ref profile);
-                    ApplicationConfig.SelectedProfile = profile;
+                    var login = new FrmLogin(ApplicationLanguage, AvailableProfiles, false,
+                        ApplicationConfig.SelectedProfile);
+                    login.SilentLogin(ApplicationConfig.SelectedProfile.Email,
+                        ApplicationConfig.SelectedProfile.Password);
+                    ApplicationConfig.SelectedProfile = login.UserProfile;
                     if (OnProfileChanged != null) OnProfileChanged();
                 }
                 else
                 {
-                    string message;
-                    if (String.IsNullOrEmpty(result.Error.Cause))
+                    if (result.Error.ErrorString == "ForbiddenOperationException")
                     {
-                        message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine +
-                                  "Error Message: " +
-                                  result.Error.ErrorMessage;
+                        var message = Manager.LogMessage("Invalid session. User need to login.",
+                            BlockLaunchManager.LogMode.Warning, true, ApplicationLanguage);
+                        AppendBlocklaunchLog(message);
+                        var profile = ApplicationConfig.SelectedProfile;
+                        ChangeProfile(ref profile);
                     }
                     else
                     {
-                        message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine +
-                                  "Error Message: " +
-                                  result.Error.ErrorMessage + Environment.NewLine + "Cause: " + result.Error.Cause;
+                        string message;
+                        if (String.IsNullOrEmpty(result.Error.Cause))
+                        {
+                            message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine +
+                                      "Error Message: " +
+                                      result.Error.ErrorMessage;
+                        }
+                        else
+                        {
+                            message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine +
+                                      "Error Message: " +
+                                      result.Error.ErrorMessage + Environment.NewLine + "Cause: " + result.Error.Cause;
+                        }
+                        var errorDialog = new Dialog(Dialog.StatusMode.Error, "Failed to refresh session!",
+                            "An error occured while refreshing session!", "See details for more information.",
+                            ApplicationLanguage.Ok, ApplicationLanguage.Cancel, message);
+                        errorDialog.ShowDialog();
+                        return;
                     }
-                    var errorDialog = new Dialog(Dialog.StatusMode.Error, "Failed to refresh session!",
-                        "An error occured while refreshing session!", "See details for more information.",
-                        ApplicationLanguage.Ok, ApplicationLanguage.Cancel, message);
-                    errorDialog.ShowDialog();
-                    return;
                 }
+                
             }
             else
             {
@@ -566,6 +595,16 @@ namespace BlockLaunch.UI.Forms
             if (!downloadedMomentsAgo)
             {
                 DownloadLibraries(ApplicationConfig.SelectedProfile.SelectedVersion);
+                if (_cancel)
+                {
+                    _cancel = false;
+                    var error = new Dialog(Dialog.StatusMode.Error, "Faild to download minecraft",
+                        "An error occured while downloading minecraft!",
+                        "Server is not available or you don't have internet connection!", ApplicationLanguage.Ok,
+                        ApplicationLanguage.Cancel);
+                    error.ShowDialog();
+                    return;
+                }
             }
             var home = AppDomain.CurrentDomain.BaseDirectory + "minecraft";
             var versionsDir = home + @"\versions";
@@ -652,6 +691,8 @@ namespace BlockLaunch.UI.Forms
             SetProgressBarValue(e.DownloadedFileCount, e.TotalFiles);
         }
 
+        private bool _cancel;
+
         private void downloadManager_OnDownloadStarted(object sender, DownloadManager.DownloadStartedArgs e)
         {
             switch (e.FileType)
@@ -664,6 +705,13 @@ namespace BlockLaunch.UI.Forms
                     break;
                 case "lib_sha":
                     SetDownloadProgressBarText("Downloading SHA1 Hash from librarie " + e.DownloadedFile); // devil number line >:D
+                    break;
+                case "failed_can_continue":
+                    AppendMinecraftLog(e.DownloadedFile);
+                    break;
+                case "failed":
+                    AppendMinecraftLog(e.DownloadedFile);
+                    _cancel = true;
                     break;
                 case "asset":
                     SetDownloadProgressBarText("Downloading asset " + e.DownloadedFile); 
@@ -738,7 +786,6 @@ namespace BlockLaunch.UI.Forms
                 var ver = ApplicationConfig.SelectedProfile.SelectedVersion.Type + " " +
                           ApplicationConfig.SelectedProfile.SelectedVersion.Id;
                 ApplyLanguage(ver, ApplicationConfig.SelectedProfile.CachedUsername);
-                Manager.SaveConfig(ApplicationConfig);
             }
         }
 

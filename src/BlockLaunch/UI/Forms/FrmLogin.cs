@@ -89,6 +89,12 @@ namespace BlockLaunch.UI.Forms
                     UserProfile.AccessToken = result.AuthResponse.AccessToken;
                     UserProfile.ClientToken = result.AuthResponse.ClientToken;
                     UserProfile.Properties = result.AuthResponse.MinecraftUser.Properties;
+                    string pass = null;
+                    if (FrmMain.ApplicationConfig.SavePassword)
+                    {
+                        pass = txbPassword.Text;
+                    }
+                    UserProfile.Password = pass;
                 }
                 
             }
@@ -113,6 +119,95 @@ namespace BlockLaunch.UI.Forms
                 _cancelOk = true;
             }
            
+        }
+
+        public void SilentLogin(string email, string password)
+        {
+            if (_createProfile)
+            {
+                if (_profiles != null)
+                {
+                    var foundProfile = _profiles.Find(x => x.ProfileName == txbProfileName.Text);
+                    if (foundProfile != null)
+                    {
+                        var errorDialog = new Dialog(Dialog.StatusMode.Error, "Profile-Name already taken.",
+                            "Profile-Name already taken!", "A profile with the same profile name already exists!",
+                            _language.Ok, _language.Cancel);
+                        errorDialog.ShowDialog();
+                        _cancelOk = true;
+                        return;
+                    }
+                }
+            }
+            var parameter = new AuthentificateObjects
+            {
+                Email = email,
+                Password = password
+            };
+            var login = new LoginManager();
+            var result = login.Authentificate(parameter);
+            if (result.Status)
+            {
+                if (_createProfile)
+                {
+                    string tmp;
+                    var jsonUuid =
+                        JsonConvert.DeserializeObject<UsernameToUuid>(
+                            LoginManager.GetRequest("https://api.mojang.com/users/profiles/minecraft/" +
+                                                    result.AuthResponse.SelectedProfile.Name, out tmp));
+                    string pass = null;
+                    if (FrmMain.ApplicationConfig.SavePassword)
+                    {
+                        pass = password;
+                    }
+                    var profile = new Profile
+                    {
+                        Password = pass,
+                        Email = parameter.Email,
+                        ClientToken = result.AuthResponse.ClientToken,
+                        AccessToken = result.AuthResponse.AccessToken,
+                        ProfileName = txbProfileName.Text,
+                        SelectedVersion = null,
+                        Properties = result.AuthResponse.MinecraftUser.Properties,
+                        Uuid = jsonUuid.Uuid,
+                        CachedUsername = result.AuthResponse.SelectedProfile.Name
+                    };
+                    UserProfile = profile;
+                }
+                else
+                {
+                    UserProfile.AccessToken = result.AuthResponse.AccessToken;
+                    UserProfile.ClientToken = result.AuthResponse.ClientToken;
+                    UserProfile.Properties = result.AuthResponse.MinecraftUser.Properties;
+                    string pass = null;
+                    if (FrmMain.ApplicationConfig.SavePassword)
+                    {
+                        pass = password;
+                    }
+                    UserProfile.Password = pass;
+                }
+
+            }
+            else
+            {
+                string message;
+                if (String.IsNullOrEmpty(result.Error.Cause))
+                {
+                    message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine + "Error Message: " +
+                              result.Error.ErrorMessage;
+                }
+                else
+                {
+                    message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine + "Error Message: " +
+                              result.Error.ErrorMessage + Environment.NewLine + "Cause: " + result.Error.Cause;
+                }
+
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, "Authentification failed!",
+                    "Failed to login to your minecraft account!", "See details for more informations.", _language.Ok,
+                    _language.Cancel, message);
+                errorDialog.ShowDialog();
+                _cancelOk = true;
+            }
         }
 
         private void FrmLogin_Load(object sender, EventArgs e)
