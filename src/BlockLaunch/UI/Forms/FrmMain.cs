@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using BlockLaunch.Classes.JSON;
@@ -513,8 +514,11 @@ namespace BlockLaunch.UI.Forms
             loginThread.Start();
         }
 
+        private bool _downloadedMomentsAgo;
+
         private void LoginAndPlay()
         {
+            Invoke(new Action(rtbLogMinecraft.Clear));
             ToggleVisibleOnProgressBar(true);
             SetDownloadProgressBarText("Preparing...");
             var javaw = JavaPath();
@@ -575,7 +579,7 @@ namespace BlockLaunch.UI.Forms
                 ApplicationConfig.SelectedProfile.AccessToken = result.oRefreshResponse.AccessToken;
                 if (OnProfileChanged != null) OnProfileChanged();
             }
-            var downloadedMomentsAgo = false;
+            
             var infos = VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id) ? new VersionManager().ReadVersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id) : new VersionManager().VersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
            
             if (infos.ParentVersion != null && !VersionInstalled(infos.ParentVersion))
@@ -591,9 +595,9 @@ namespace BlockLaunch.UI.Forms
             {
                 CreateDefaultDirectorys(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
                 DownloadVersion(ApplicationConfig.SelectedProfile.SelectedVersion);
-                downloadedMomentsAgo = true;
+                _downloadedMomentsAgo = true;
             }
-            if (!downloadedMomentsAgo)
+            if (!_downloadedMomentsAgo)
             {
                 DownloadLibraries(ApplicationConfig.SelectedProfile.SelectedVersion);
                 if (_cancel)
@@ -606,6 +610,7 @@ namespace BlockLaunch.UI.Forms
                     error.ShowDialog();
                     return;
                 }
+                _downloadedMomentsAgo = true;
             }
             var home = AppDomain.CurrentDomain.BaseDirectory + "minecraft";
             var versionsDir = home + @"\versions";
@@ -642,6 +647,83 @@ namespace BlockLaunch.UI.Forms
             java.WaitForExit();
             ToggleFormVisiblity(true);
             Directory.Delete(nativeFolder, true);
+            if (java.ExitCode != 0)
+            {
+                const string startTag = "---- Minecraft Crash Report ----";
+                const string endTag = "#@!@#";
+                var text = GetTextFromControl(rtbLogMinecraft);
+                var pos1 = text.IndexOf(startTag, StringComparison.Ordinal) + startTag.Length;
+                var pos2 = text.IndexOf(endTag, StringComparison.Ordinal);
+                var match = text.Substring(pos1, pos2 - pos1);
+                match = startTag + match;
+                match = match.TrimEnd();
+                GenerateCrashReportTab(match);
+            }
+        }
+
+        private void GenerateCrashReportTab(string crash)
+        {
+            var page = new TabPage("Crash Report " + DateTime.Now.ToString("HH:mm:ss"));
+            var crashBox = new RichTextBox {Dock = DockStyle.Fill, ReadOnly = true};
+            page.Controls.Add(crashBox);
+            AddPage(page);
+            SetText(crashBox, crash);
+            SetPage(page);
+            page.Leave += page_Leave;
+        }
+
+        private void page_Leave(object sender, EventArgs e)
+        {
+            var page = sender as TabPage;
+            if (page == null) return;
+            page.Controls.Clear();
+            tbcMain.TabPages.Remove(page);
+            page.Dispose();
+        }
+        
+        private void AddPage(TabPage tp)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<TabPage>(AddPage), tp);
+            }
+            else
+            {
+                tbcMain.TabPages.Add(tp);
+            }
+        }
+
+        private void SetPage(TabPage tp)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<TabPage>(SetPage), tp);
+            }
+            else
+            {
+                tp.Select();
+            }
+        }
+
+        private void SetText(Control control, string text)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<Control, string>(SetText), control, text);
+            }
+            else
+            {
+                control.Text = text;
+            }
+        }
+
+        private string GetTextFromControl(Control control)
+        {
+            if (control.InvokeRequired)
+            {
+                return (string)control.Invoke(new Func<string>(() => GetTextFromControl(control)));
+            }
+            return control.Text;
         }
 
         private void ToggleFormVisiblity(bool value)
@@ -807,6 +889,11 @@ namespace BlockLaunch.UI.Forms
         {
             var version = (Classes.JSON.Version)ckbVersions.SelectedValue;
             if (version == ApplicationConfig.SelectedProfile.SelectedVersion) return;
+            if (version == null)
+            {
+                ckbVersions.SelectedIndex = 0;
+                return;
+            }
             ApplicationConfig.SelectedProfile.SelectedVersion = new Classes.JSON.Version
             {
                 Id = version.Id,
@@ -817,6 +904,7 @@ namespace BlockLaunch.UI.Forms
             if (OnProfileChanged != null) OnProfileChanged();
             lblCurrentVersion.Text = ApplicationLanguage.SelectedVersion.Replace("%game_ver", version.Type + " " + version.Id);
             Manager.SaveProfiles(AvailableProfiles);
+            _downloadedMomentsAgo = false;
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)

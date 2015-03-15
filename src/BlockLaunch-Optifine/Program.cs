@@ -237,7 +237,14 @@ namespace BlockLaunch_Optifine
             Directory.CreateDirectory(@"work\" + newVersion);
             ExtractJar(oldFile, @"work\" + oldVersion);
             ExtractJar(newFile, @"work\" + newVersion);
-            DirectoryMove(@"work\" + newVersion, @"work\" + oldVersion, false);
+            Console.WriteLine("Merge both versions...");
+            DirectoryMove(@"work\" + newVersion, @"work\" + oldVersion, true);
+            Console.WriteLine("Deleting signatures...");
+            if (Directory.Exists(@"work\" + oldVersion + @"\META-INF"))
+            {
+                Directory.Delete(@"work\" + oldVersion + @"\META-INF", true);
+            }
+            Console.WriteLine("Creating new JAR file...");
             CreateJar(@"work\" + oldVersion, @"work\" + newVersion + ".jar");
         }
 
@@ -254,28 +261,8 @@ namespace BlockLaunch_Optifine
 
         private static void CreateJar(string sourceFolder, string jar)
         {
-            var files = Directory.GetFiles(sourceFolder, "*.*", SearchOption.AllDirectories);
-            using (var s = new ZipOutputStream(File.Create(jar)))
-            {
-                s.SetLevel(9);
-                var buffer = new byte[4096];
-                foreach (var file in files)
-                {
-                    var entry = new ZipEntry(Path.GetFileName(file)) {DateTime = DateTime.Now};
-                    s.PutNextEntry(entry);
-                    using (var fs =  File.OpenRead(file))
-                    {
-                        int sourceBytes;
-                        do
-                        {
-                            sourceBytes = fs.Read(buffer, 0, buffer.Length);
-                            s.Write(buffer, 0, sourceBytes);
-                        } while (sourceBytes > 0);
-                    }
-                }
-                s.Finish();
-                s.Close();
-            }
+            var zip = new FastZip {CreateEmptyDirectories = true};
+            zip.CreateZip(jar, sourceFolder, true, "", "");
         }
 
         private static void UpdateJson(string oldVersion, string newVersion)
@@ -309,6 +296,7 @@ namespace BlockLaunch_Optifine
                                  string.Format(@"minecraft\versions\{0}\{1}.json", newVersion,oldVersion));
             File.Delete(Environment.CurrentDirectory + @"\" +
                                  string.Format(@"minecraft\versions\{0}\{1}.jar", newVersion, oldVersion));
+            Console.WriteLine(@"Deleting ""work"" directory");
             Directory.Delete(@"work", true);
         }
     }

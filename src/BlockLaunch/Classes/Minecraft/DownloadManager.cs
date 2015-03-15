@@ -115,7 +115,7 @@ namespace BlockLaunch.Classes.Minecraft
                 if (OnDownloadStarted != null) OnDownloadStarted(this, args);
                 using (var downloader = new WebClient {Proxy = null})
                 {
-                    if (FileOnServer(jarWeb))
+                    if (UrlCheck(jarWeb))
                     {
                         try
                         {
@@ -127,32 +127,45 @@ namespace BlockLaunch.Classes.Minecraft
                             endArgs = new DownloadFinishedArgs(downloadedFiles + 1, count);
                             if (OnDownloadFinished != null) OnDownloadFinished(this, endArgs);
                         }
-                        catch (WebException)
+                        catch (WebException ex)
                         {
-                            var fail = new DownloadStartedArgs(
-                                    "Couldn't download " + jarWeb, "failed");
-                            if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
-                            break;
-                        }
-                    }
-                    else
-                    {
                             if (File.Exists(jarLocal))
                             {
                                 var fail = new DownloadStartedArgs(
-                                    "Couldn't download " + jarWeb + " but local copy exists!", "failed_can_continue");
+                                    "Couldn't download " + jarWeb + " but local copy exists!\n" + ex,
+                                    "failed_can_continue");
                                 if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
                                 continue;
                             }
                             else
                             {
                                 var fail = new DownloadStartedArgs(
-                                    "Couldn't download " + jarWeb, "failed");
+                                    "Couldn't download " + jarWeb + "\n" + ex, "failed");
                                 if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
                                 break;
                             }
+
+                        }
                     }
-                    
+                    else
+                    {
+                        if (File.Exists(jarLocal))
+                        {
+                            var fail = new DownloadStartedArgs(
+                                "Couldn't download " + jarWeb + " but local copy exists!",
+                                "failed_can_continue");
+                            if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
+                            continue;
+                        }
+                        else
+                        {
+                            var fail = new DownloadStartedArgs(
+                                "Couldn't download " + jarWeb, "failed");
+                            if (OnDownloadStarted != null) OnDownloadStarted(this, fail);
+                            break;
+                        }
+                    }
+                        
                 }
                 
                 downloadedFiles += 2;
@@ -183,20 +196,30 @@ namespace BlockLaunch.Classes.Minecraft
             }
         }
 
-        private bool FileOnServer(string url)
+        public bool UrlCheck(string fileUrl)
         {
-            var request = (HttpWebRequest) WebRequest.Create(url);
+            bool result;
+            HttpWebResponse response = null;
+            var uri = new Uri(fileUrl);
+            var request = WebRequest.CreateHttp(uri);
             request.Method = "HEAD";
-            request.Timeout = 3000;
+            request.Timeout = 5000;
+            request.AllowAutoRedirect = false;
             try
             {
-                request.GetResponse();
-                return true;
+                response = (HttpWebResponse) request.GetResponse();
+                result = response.StatusCode == HttpStatusCode.OK;
             }
-            catch (WebException)
+            catch(WebException)
             {
-                return false;
+                result = false;
             }
+            finally
+            {
+                if(response != null)
+                    response.Close();
+            }
+            return result;
         }
     }
 }
