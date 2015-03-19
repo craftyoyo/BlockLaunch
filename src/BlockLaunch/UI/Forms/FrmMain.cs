@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using BlockLaunch.Classes.JSON;
@@ -371,7 +370,7 @@ namespace BlockLaunch.UI.Forms
                 var message = Manager.LogMessage("Failed to access config file. Reason: Access denied.", BlockLaunchManager.LogMode.Error, true, _initializingLanguage);
                 AppendBlocklaunchLog(message);
                 var errorDialog = new Dialog(Dialog.StatusMode.Error, "Error", "Failed to load config",
-                    "Failed to load config because the access denied!", "OK", "Cancel", "Please try delete your config and start the launcher again.");
+                    "Failed to load config because the access denied!", _initializingLanguage, "Please try delete your config and start the launcher again.");
                 errorDialog.ShowDialog();
                 Environment.Exit(5);
             }
@@ -444,6 +443,30 @@ namespace BlockLaunch.UI.Forms
 
         }
 
+        private void AppendConverterLog(string message)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(AppendConverterLog), message);
+            }
+            else
+            {
+                rtbLogConvert.AppendText(message + Environment.NewLine);
+            }
+        }
+
+        private void AppendInstallerLog(string message)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string>(AppendInstallerLog), message);
+            }
+            else
+            {
+                rtbLogInstaller.AppendText(message + Environment.NewLine);
+            }
+        }
+
         private void AppendMinecraftLog(string message)
         {
             if (InvokeRequired)
@@ -467,8 +490,16 @@ namespace BlockLaunch.UI.Forms
             tbpUpdates.Text = ApplicationLanguage.TabpageUpdates;
             tabLogs.Text = ApplicationLanguage.TabpageLogs;
             tabBL.Text = ApplicationLanguage.TabpageLogsBlocklaunch;
+            tabTools.Text = ApplicationLanguage.TabpageTools;
             tabAll.Text = ApplicationLanguage.TabpageLogsAll;
             tabMinecraft.Text = ApplicationLanguage.TabpageLogsMinecraft;
+            tabTools.Text = ApplicationLanguage.TabpageTools;
+            grpOptifine.Text = ApplicationLanguage.Installer;
+            grpConverter.Text = ApplicationLanguage.Converter;
+            cmdConvertVersion.Text = ApplicationLanguage.ConvertSelectedVersion;
+            cmdBrowse.Text = ApplicationLanguage.Browse;
+            lblOptifine.Text = ApplicationLanguage.PathToJar;
+            cmdRunInstaller.Text = ApplicationLanguage.InstallOptifine;
             lblWelcomeBack.Text = ApplicationLanguage.WelcomeBack.Replace("%player", player);
             lblSelectVersion.Text = ApplicationLanguage.Version;
             cmdShowUUID.Text = ApplicationLanguage.ShowUuid;
@@ -510,6 +541,7 @@ namespace BlockLaunch.UI.Forms
 
         private void cmdLogin_Click(object sender, EventArgs e)
         {
+            cmdLogin.Enabled = false;
             var loginThread = new Thread(LoginAndPlay);
             loginThread.Start();
         }
@@ -555,19 +587,19 @@ namespace BlockLaunch.UI.Forms
                         string message;
                         if (String.IsNullOrEmpty(result.Error.Cause))
                         {
-                            message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine +
-                                      "Error Message: " +
+                            message = ApplicationLanguage.ExceptionType + result.Error.ErrorString + Environment.NewLine +
+                                      ApplicationLanguage.ErrorMessage +
                                       result.Error.ErrorMessage;
                         }
                         else
                         {
-                            message = "Exception Type: " + result.Error.ErrorString + Environment.NewLine +
-                                      "Error Message: " +
-                                      result.Error.ErrorMessage + Environment.NewLine + "Cause: " + result.Error.Cause;
+                            message = ApplicationLanguage.ExceptionType + result.Error.ErrorString + Environment.NewLine +
+                                      ApplicationLanguage.ErrorMessage +
+                                      result.Error.ErrorMessage + Environment.NewLine + ApplicationLanguage.Cause + result.Error.Cause;
                         }
-                        var errorDialog = new Dialog(Dialog.StatusMode.Error, "Failed to refresh session!",
-                            "An error occured while refreshing session!", "See details for more information.",
-                            ApplicationLanguage.Ok, ApplicationLanguage.Cancel, message);
+                        var errorDialog = new Dialog(Dialog.StatusMode.Error, ApplicationLanguage.RefreshFailedTitle,
+                            ApplicationLanguage.RefreshFailedStatus, ApplicationLanguage.RefreshFailedDetails,
+                            ApplicationLanguage, message);
                         errorDialog.ShowDialog();
                         return;
                     }
@@ -579,16 +611,21 @@ namespace BlockLaunch.UI.Forms
                 ApplicationConfig.SelectedProfile.AccessToken = result.oRefreshResponse.AccessToken;
                 if (OnProfileChanged != null) OnProfileChanged();
             }
-            
-            var infos = VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id) ? new VersionManager().ReadVersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id) : new VersionManager().VersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
-           
-            if (infos.ParentVersion != null && !VersionInstalled(infos.ParentVersion))
+
+            if (!File.Exists(@"minecraft\launcher_profiles.json"))
             {
-                var error = new Dialog(Dialog.StatusMode.Error, "Parent version not installed!",
-                    "Parent Version is not installed!",
-                    "Version " + infos.ParentVersion + " is not installed to run " + infos.Id, ApplicationLanguage.Ok,
-                    ApplicationLanguage.Cancel);
+                File.Create(@"minecraft\launcher_profiles.json");
+            }
+
+            var infos = VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id) ? VersionManager.ReadVersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id) : new VersionManager().VersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
+           
+            if (infos.ParentVersion != null)
+            {
+                var error = new Dialog(Dialog.StatusMode.Info, ApplicationLanguage.ConversionRequired,
+                    ApplicationLanguage.ConversionStatus,
+                    ApplicationLanguage.ConversionDetails, ApplicationLanguage);
                 error.ShowDialog();
+                SetPage(tabTools);
                 return;
             }
             if (!VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id) && infos.ParentVersion == null)
@@ -603,10 +640,9 @@ namespace BlockLaunch.UI.Forms
                 if (_cancel)
                 {
                     _cancel = false;
-                    var error = new Dialog(Dialog.StatusMode.Error, "Failed to download minecraft",
-                        "An error occured while downloading minecraft!",
-                        "Server is not available or you don't have internet connection!", ApplicationLanguage.Ok,
-                        ApplicationLanguage.Cancel);
+                    var error = new Dialog(Dialog.StatusMode.Error, ApplicationLanguage.DownloadFailedTitle,
+                        ApplicationLanguage.DownloadFailedStatus,
+                        ApplicationLanguage.DownloadFailedDetails, ApplicationLanguage);
                     error.ShowDialog();
                     return;
                 }
@@ -627,7 +663,7 @@ namespace BlockLaunch.UI.Forms
             var javaStart = new ProcessStartInfo(javaw)
             {
                 Arguments = arguments,
-                CreateNoWindow = true,
+                CreateNoWindow = true, // devil number line >:D
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -639,8 +675,8 @@ namespace BlockLaunch.UI.Forms
                 AppendMinecraftLog(e.Data);
             };
             java.OutputDataReceived += (sender, e) => AppendMinecraftLog(e.Data);
-            java.Start();
-            java.BeginOutputReadLine();
+            java.Start(); 
+            java.BeginOutputReadLine(); 
             java.BeginErrorReadLine();
             ToggleFormVisiblity(false);
             ToggleVisibleOnProgressBar(false);
@@ -659,11 +695,12 @@ namespace BlockLaunch.UI.Forms
                 match = match.TrimEnd();
                 GenerateCrashReportTab(match);
             }
+            EnableLoginButton(true);
         }
 
         private void GenerateCrashReportTab(string crash)
         {
-            var page = new TabPage("Crash Report " + DateTime.Now.ToString("HH:mm:ss"));
+            var page = new TabPage(ApplicationLanguage.CrashReport+ DateTime.Now.ToString("HH:mm:ss"));
             var crashBox = new RichTextBox {Dock = DockStyle.Fill, ReadOnly = true};
             page.Controls.Add(crashBox);
             AddPage(page);
@@ -681,62 +718,7 @@ namespace BlockLaunch.UI.Forms
             page.Dispose();
         }
         
-        private void AddPage(TabPage tp)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<TabPage>(AddPage), tp);
-            }
-            else
-            {
-                tbcMain.TabPages.Add(tp);
-            }
-        }
-
-        private void SetPage(TabPage tp)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<TabPage>(SetPage), tp);
-            }
-            else
-            {
-                tp.Select();
-            }
-        }
-
-        private void SetText(Control control, string text)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<Control, string>(SetText), control, text);
-            }
-            else
-            {
-                control.Text = text;
-            }
-        }
-
-        private string GetTextFromControl(Control control)
-        {
-            if (control.InvokeRequired)
-            {
-                return (string)control.Invoke(new Func<string>(() => GetTextFromControl(control)));
-            }
-            return control.Text;
-        }
-
-        private void ToggleFormVisiblity(bool value)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<bool>(ToggleFormVisiblity), value);
-            }
-            else
-            {
-                Visible = value;
-            }
-        }
+        
 
         private static string JavaPath()
         {
@@ -745,7 +727,7 @@ namespace BlockLaunch.UI.Forms
             {
                 if (baseKey == null) return null;
                 var currentVersion = baseKey.GetValue("CurrentVersion").ToString();
-                using (var homeKey = baseKey.OpenSubKey(currentVersion))  // devil number line >:D
+                using (var homeKey = baseKey.OpenSubKey(currentVersion))  
                     if (homeKey != null) return homeKey.GetValue("JavaHome") + @"\bin\javaw.exe";
             }
             return null;
@@ -917,6 +899,7 @@ namespace BlockLaunch.UI.Forms
             GC.Collect();
         }
 
+        #region Invoke-Methods
         private void SetProgressBarValue(int value, int maximum)
         {
             if (InvokeRequired)
@@ -957,6 +940,76 @@ namespace BlockLaunch.UI.Forms
                 pgbDownload.Value = 0;
             }
         }
+
+        private void AddPage(TabPage tp)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<TabPage>(AddPage), tp);
+            }
+            else
+            {
+                tbcMain.TabPages.Add(tp);
+            }
+        }
+
+        private void SetPage(TabPage tp)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<TabPage>(SetPage), tp);
+            }
+            else
+            {
+                tbcMain.SelectedTab = tp;
+            }
+        }
+
+        private void SetText(Control control, string text)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<Control, string>(SetText), control, text);
+            }
+            else
+            {
+                control.Text = text;
+            }
+        }
+
+        private string GetTextFromControl(Control control)
+        {
+            if (control.InvokeRequired)
+            {
+                return (string)control.Invoke(new Func<string>(() => GetTextFromControl(control)));
+            }
+            return control.Text;
+        }
+
+        private void ToggleFormVisiblity(bool value)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<bool>(ToggleFormVisiblity), value);
+            }
+            else
+            {
+                Visible = value;
+            }
+        }
+
+        private void EnableLoginButton(bool value)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<bool>(EnableLoginButton), value);
+            }
+            else
+            {
+                cmdLogin.Enabled = value;
+            }
+        }
+        #endregion
 
         private bool _dontChange;
 
@@ -1000,7 +1053,114 @@ namespace BlockLaunch.UI.Forms
             Manager.SaveProfiles(AvailableProfiles);
         }
 
+        #region Tools
+
+        private void cmdConvertVersion_Click(object sender, EventArgs e)
+        {
+            if (!VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id))
+            {
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, "Version not installed!",
+                    "Your current version is not installed!", "Please install the version before trying to convert it.",
+                    ApplicationLanguage);
+                errorDialog.ShowDialog();
+                return;
+            }
+            var json = VersionManager.ReadVersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
+            if (json.ParentVersion == null)
+            {
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, "Version does not inherit from a version!",
+                    "Version does not inherit from a version!", "Please convert a version that use inheritsFrom",
+                    ApplicationLanguage);
+                errorDialog.ShowDialog();
+                return;
+            }
+            if (!File.Exists(@"tools\block_converter.exe"))
+            {
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, "BlockLaunch-Converter not installed!",
+                    "BlockLaunch-Converter not installed!", "Install the tools under https://github.com/KaskadekingDE/BlockLaunch/releases",
+                    ApplicationLanguage);
+                errorDialog.ShowDialog();
+            }
+            var process = new Process
+            {
+                StartInfo =
+                {
+                    FileName = @"tools\block_converter.exe",
+                    CreateNoWindow = false,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.StartInfo.Arguments += json.ParentVersion + " " +
+                                           ApplicationConfig.SelectedProfile.SelectedVersion.Id;
+            process.OutputDataReceived += process_OutputDataReceived;
+            process.Start();
+            process.BeginOutputReadLine();
+            while (!process.HasExited)
+            {
+                Application.DoEvents();
+            }
+        }
+
+        public void process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (e.Data == null) return;
+            AppendConverterLog(e.Data);
+        }
+
+        private void txbFile_DragDrop(object sender, DragEventArgs e)
+        {
+            var file = (string)e.Data.GetData(DataFormats.FileDrop);
+            txbFile.Text = file;
+        }
+
+        private void txbFile_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+        }
+
+        private void cmdBrowse_Click(object sender, EventArgs e)
+        {
+            if (ofdOptifine.ShowDialog() == DialogResult.OK)
+            {
+                txbFile.Text = ofdOptifine.FileName;
+            }
+        }
+
+        private void cmdRunInstaller_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(@"tools\block_optifine_installer.exe"))
+            {
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, "BlockLaunch-Optfine Installer not installed!",
+                    "BlockLaunch-Optfine Installer not installed!", "Install the tools under https://github.com/KaskadekingDE/BlockLaunch/releases",
+                    ApplicationLanguage);
+                errorDialog.ShowDialog();
+            }
+            var process = new Process
+            {
+                StartInfo =
+                {
+                    FileName = @"tools\block_optifine_installer.exe",
+                    CreateNoWindow = false,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
+                }
+            };
+            process.StartInfo.Arguments += txbFile.Text;
+            process.OutputDataReceived += (obj, args) => AppendInstallerLog(args.Data);
+            process.Start();
+            process.BeginOutputReadLine();
+            while (!process.HasExited)
+            {
+                Application.DoEvents();
+            }
+        }
+        #endregion
     }
+    #region DataBinding-Classes
 
     public class ProfileData
     {
@@ -1025,4 +1185,5 @@ namespace BlockLaunch.UI.Forms
             Version = version;
         }
     }
+    #endregion
 }

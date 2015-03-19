@@ -15,6 +15,7 @@
     "tabpage_logs_all": "All",
     "tabpage_logs_blocklaunch": "BlockLaunch",
     "tabpage_logs_minecraft": "Minecraft",
+    "tabpage_tools": "Tools",
 
     "welcome_back": "Welcome back, %player :)",
     "selected_version": "Selected Version: %game_ver",
@@ -42,5 +43,29 @@
     "login": "Login",
     "email": "E-Mail: ",
     "password": "Password: ",
-    "profile_name": "Profile Name: "
+    "profile_name": "Profile Name: ",
+
+    // Tools-Translation
+    "tabpage_tools": "Tools",
+    "converter": "BlockLaunch-Converter",
+    "optifine_installer": "BlockLaunch-OptiFine Installer",
+    "convert_selected_version": "Convert selected version",
+    "browse": "Browse...",
+    "path_to_jar": "Path to JAR",
+    "install_optifine": "Install Optifine",
+
+    // Error-Translation
+    "crash_report": "Crash-Report ",
+    "refresh_failed_title": "Error while refreshing login-session",
+    "refresh_failed_status": "An error while refreshing login-session occured!",
+    "refresh_failed_details": "For more informations see details",
+    "exception_type": "Exception-Type: ",
+    "error_message": "Error-Message: ",
+    "cause": "Cause: ",
+    "conversion_required": "Conversion required!",
+    "conversion_status": "The selected version must be converted to a BlockLaunch compatible version!",
+    "conversion_details": "Convert the version under Tools --> BlockLaunch-Converter",
+    "download_failed_title": "Error while downloading Minecraft",
+    "download_failed_status": "An error while downloading Minecraft occured",
+    "download_failed_details": "The server ist not available or you don't have a internet connection"
 }

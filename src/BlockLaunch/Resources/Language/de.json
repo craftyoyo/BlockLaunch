@@ -42,5 +42,29 @@
     "login": "Einloggen",
     "email": "E-Mail: ",
     "password": "Passwort: ",
-    "profile_name": "Profil-Name: "
+    "profile_name": "Profil-Name: ",
+
+    // Tools-Translation
+    "tabpage_tools": "Tools",
+    "converter": "BlockLaunch-Converter",
+    "optifine_installer": "BlockLaunch-OptiFine Installer",
+    "convert_selected_version": "Derzeit ausgewählte Version konvertieren",
+    "browse": "Durchsuchen...",
+    "path_to_jar": "Pfad zur JAR",
+    "install_optifine": "Optifine installieren",
+
+    // Error-Translation
+    "crash_report": "Fehler-Bericht ",
+    "refresh_failed_title": "Fehler beim aktualisieren der Login-Session!",
+    "refresh_failed_status": "Ein Fehler beim aktualisieren der Session ist aufgetreten!",
+    "refresh_failed_details": "Für mehr Informationen siehe die Details!",
+    "exception_type": "Ausnahme-Typ: ",
+    "error_message": "Fehler-Nachricht: ",
+    "cause": "Grund: ",
+    "conversion_required": "Konvertierung nötig!",
+    "conversion_status": "Die derzeit ausgewählte Version muss in eine BlockLaunch kompatible Version konvertiert werden!",
+    "conversion_details": "Konvertiere die Version unter Tools --> BlockLaunch-Converter",
+    "download_failed_title": "Fehler beim herrunterladen von Minecraft",
+    "download_failed_status": "Ein Fehler beim herrunterladen von Minecraft ist aufgetreten!",
+    "download_failed_details": "Der Server ist nicht verfügbar oder du hast keine Internetverbindung!"
 }

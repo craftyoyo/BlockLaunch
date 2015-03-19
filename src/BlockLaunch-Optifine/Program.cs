@@ -4,16 +4,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading;
+using BlockLaunch.Classes.JSON;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 
-namespace BlockLaunch_Optifine
+namespace BlockLaunch.Optifine
 {
     public class Program
     {
         private static readonly AutoResetEvent VersionFound = new AutoResetEvent(false);
-        private static string _file;
 
         public  static void Main(string[] args)
         {
@@ -30,7 +30,6 @@ namespace BlockLaunch_Optifine
                 Console.ReadKey();
                 return;
             }
-            _file = args[0];
             Console.WriteLine("Copy vanilla version...");
             var src = Environment.CurrentDirectory + @"\" + string.Format(@"minecraft\versions\{0}", _output1);
             var dest = Environment.CurrentDirectory + @"\" + string.Format(@"minecraft\versions\{0}", _output2);

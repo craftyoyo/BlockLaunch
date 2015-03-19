@@ -78,8 +78,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libs\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="MakarovDev.ExpandCollapsePanel">
-      <HintPath>..\..\..\..\..\Downloads\ExpandCollapsePanel-master\MakarovDev.ExpandCollapsePanel\bin\Debug\MakarovDev.ExpandCollapsePanel.dll</HintPath>
+    <Reference Include="MakarovDev.ExpandCollapsePanel, Version=1.0.5524.26704, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\MakarovDev.ExpandCollapsePanel.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -87,7 +88,7 @@
     </Reference>
     <Reference Include="nUpdate, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Stuff\Entwicklung\nUpdate\0.1.0.0\Alpha 5\nUpdate\nUpdate.dll</HintPath>
+      <HintPath>Libs\nUpdate.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -102,8 +103,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WebKitBrowser">
-      <HintPath>bin\Debug\Webkit\WebKitBrowser.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>Libs\WebKitBrowser.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +208,9 @@
     <Content Include="Resources\MainIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(ProjectDir)Tools\helper.exe" "$(SolutionDir)BlockLaunch" $(ConfigurationName)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

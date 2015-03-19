@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BlockLaunch.Classes.Language;
 
 namespace BlockLaunch.UI.Dialogs
 {
@@ -17,8 +18,7 @@ namespace BlockLaunch.UI.Dialogs
         private readonly string _statusTitle;
         private readonly string _description;
         private readonly string _details;
-        private readonly string _ok;
-        private readonly string _cancel;
+        private readonly Language _language;
 
         public enum StatusMode
         {
@@ -26,7 +26,7 @@ namespace BlockLaunch.UI.Dialogs
             Info
         }
 
-        public Dialog(StatusMode mode, string title, string statusTitle, string statusDescription, string ok, string cancel, string details = null)
+        public Dialog(StatusMode mode, string title, string statusTitle, string statusDescription, Language language, string details = null)
         {
             InitializeComponent();
             _mode = mode;
@@ -34,8 +34,21 @@ namespace BlockLaunch.UI.Dialogs
             _statusTitle = statusTitle;
             _description = statusDescription;
             _details = details;
-            _cancel = cancel;
-            _ok = ok;
+            _language = language;
+        }
+
+        [Obsolete("Deprecated: Please use the new constructor (StatusMode, string, string, Language, string)")]
+        public Dialog(StatusMode mode, string title, string statusTitle, string statusDescription, string ok,
+            string cancel, string details = null)
+        {
+            InitializeComponent();
+            _mode = mode;
+            _title = title;
+            _statusTitle = statusTitle;
+            _description = statusDescription;
+            var language = new Language {Ok = ok, Cancel = cancel};
+            _language = language;
+            _details = details;
         }
 
         private void ecpDetails_ExpandCollapse(object sender, MakarovDev.ExpandCollapsePanel.ExpandCollapseEventArgs e)
@@ -54,8 +67,8 @@ namespace BlockLaunch.UI.Dialogs
             }
             richTextBox1.Text = _details;
             Text = _title;
-            cmdCancel.Text = _cancel;
-            cmdOk.Text = _ok;
+            cmdCancel.Text = _language.Cancel;
+            cmdOk.Text = _language.Ok;
             picStatus.Image = _mode == StatusMode.Error ? Properties.Resources.Error : Properties.Resources.Info;
             if (_mode == StatusMode.Error)
             {
@@ -65,6 +78,11 @@ namespace BlockLaunch.UI.Dialogs
             {
                 System.Media.SystemSounds.Asterisk.Play();
             }
+        }
+
+        private void cmdOk_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

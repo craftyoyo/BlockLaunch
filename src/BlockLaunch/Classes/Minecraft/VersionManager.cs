@@ -38,7 +38,7 @@ namespace BlockLaunch.Classes.Minecraft
             return JsonConvert.DeserializeObject<VersionInformation>(json);
         }
 
-        public VersionInformation ReadVersionInfos(string version)
+        public static VersionInformation ReadVersionInfos(string version)
         {
             var content = File.ReadAllText(@"minecraft\versions\" + version + @"\" + version + ".json");
             return JsonConvert.DeserializeObject<VersionInformation>(content);

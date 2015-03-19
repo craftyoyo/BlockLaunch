@@ -44,6 +44,8 @@
             this.lblLanguage = new System.Windows.Forms.Label();
             this.chkDontSavePassword = new System.Windows.Forms.CheckBox();
             this.toolDetails = new System.Windows.Forms.ToolTip(this.components);
+            this.lblJvm = new System.Windows.Forms.Label();
+            this.txbJvmArguments = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudMemory)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -122,9 +124,9 @@
             // cmdSaveSettings
             // 
             this.cmdSaveSettings.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdSaveSettings.Location = new System.Drawing.Point(15, 62);
+            this.cmdSaveSettings.Location = new System.Drawing.Point(12, 90);
             this.cmdSaveSettings.Name = "cmdSaveSettings";
-            this.cmdSaveSettings.Size = new System.Drawing.Size(361, 23);
+            this.cmdSaveSettings.Size = new System.Drawing.Size(357, 23);
             this.cmdSaveSettings.TabIndex = 7;
             this.cmdSaveSettings.Text = "Einstellungen speichern";
             this.cmdSaveSettings.UseVisualStyleBackColor = true;
@@ -180,7 +182,7 @@
             this.chkDontSavePassword.AutoSize = true;
             this.chkDontSavePassword.Checked = true;
             this.chkDontSavePassword.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDontSavePassword.Location = new System.Drawing.Point(15, 39);
+            this.chkDontSavePassword.Location = new System.Drawing.Point(12, 67);
             this.chkDontSavePassword.Name = "chkDontSavePassword";
             this.chkDontSavePassword.Size = new System.Drawing.Size(248, 17);
             this.chkDontSavePassword.TabIndex = 12;
@@ -189,11 +191,29 @@
         "e it can be stolen easily. \r\nOnly check this if you have a long password.");
             this.chkDontSavePassword.UseVisualStyleBackColor = true;
             // 
+            // lblJvm
+            // 
+            this.lblJvm.AutoSize = true;
+            this.lblJvm.Location = new System.Drawing.Point(12, 42);
+            this.lblJvm.Name = "lblJvm";
+            this.lblJvm.Size = new System.Drawing.Size(87, 13);
+            this.lblJvm.TabIndex = 13;
+            this.lblJvm.Text = "JVM-Arguments: ";
+            // 
+            // txbJvmArguments
+            // 
+            this.txbJvmArguments.Location = new System.Drawing.Point(105, 39);
+            this.txbJvmArguments.Name = "txbJvmArguments";
+            this.txbJvmArguments.Size = new System.Drawing.Size(264, 20);
+            this.txbJvmArguments.TabIndex = 14;
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(379, 92);
+            this.ClientSize = new System.Drawing.Size(379, 121);
+            this.Controls.Add(this.txbJvmArguments);
+            this.Controls.Add(this.lblJvm);
             this.Controls.Add(this.chkDontSavePassword);
             this.Controls.Add(this.lblLanguage);
             this.Controls.Add(this.comLang);
@@ -227,5 +247,7 @@
         private System.Windows.Forms.Label lblLanguage;
         private System.Windows.Forms.CheckBox chkDontSavePassword;
         private System.Windows.Forms.ToolTip toolDetails;
+        private System.Windows.Forms.Label lblJvm;
+        private System.Windows.Forms.TextBox txbJvmArguments;
     }
 }

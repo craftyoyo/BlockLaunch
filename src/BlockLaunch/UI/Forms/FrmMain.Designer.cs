@@ -56,8 +56,19 @@ namespace BlockLaunch.UI.Forms
             this.rtbLogBl = new System.Windows.Forms.RichTextBox();
             this.tabMinecraft = new System.Windows.Forms.TabPage();
             this.rtbLogMinecraft = new System.Windows.Forms.RichTextBox();
+            this.tabTools = new System.Windows.Forms.TabPage();
+            this.grpOptifine = new System.Windows.Forms.GroupBox();
+            this.rtbLogInstaller = new System.Windows.Forms.RichTextBox();
+            this.cmdBrowse = new System.Windows.Forms.Button();
+            this.txbFile = new System.Windows.Forms.TextBox();
+            this.lblOptifine = new System.Windows.Forms.Label();
+            this.cmdRunInstaller = new System.Windows.Forms.Button();
+            this.grpConverter = new System.Windows.Forms.GroupBox();
+            this.rtbLogConvert = new System.Windows.Forms.RichTextBox();
+            this.cmdConvertVersion = new System.Windows.Forms.Button();
             this.status = new System.Windows.Forms.StatusStrip();
             this.tslMain = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ofdOptifine = new System.Windows.Forms.OpenFileDialog();
             this.tbcMain.SuspendLayout();
             this.tbpMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ptbAvatar)).BeginInit();
@@ -67,6 +78,9 @@ namespace BlockLaunch.UI.Forms
             this.tabAll.SuspendLayout();
             this.tabBL.SuspendLayout();
             this.tabMinecraft.SuspendLayout();
+            this.tabTools.SuspendLayout();
+            this.grpOptifine.SuspendLayout();
+            this.grpConverter.SuspendLayout();
             this.status.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,18 +89,18 @@ namespace BlockLaunch.UI.Forms
             this.lblWelcomeBack.AutoSize = true;
             this.lblWelcomeBack.Location = new System.Drawing.Point(76, 15);
             this.lblWelcomeBack.Name = "lblWelcomeBack";
-            this.lblWelcomeBack.Size = new System.Drawing.Size(130, 13);
+            this.lblWelcomeBack.Size = new System.Drawing.Size(110, 13);
             this.lblWelcomeBack.TabIndex = 1;
-            this.lblWelcomeBack.Text = "Willkommen zurück, null :)";
+            this.lblWelcomeBack.Text = "Welcome back, null :)";
             // 
             // lblCurrentVersion
             // 
             this.lblCurrentVersion.AutoSize = true;
             this.lblCurrentVersion.Location = new System.Drawing.Point(76, 38);
             this.lblCurrentVersion.Name = "lblCurrentVersion";
-            this.lblCurrentVersion.Size = new System.Drawing.Size(128, 13);
+            this.lblCurrentVersion.Size = new System.Drawing.Size(109, 13);
             this.lblCurrentVersion.TabIndex = 2;
-            this.lblCurrentVersion.Text = "Ausgewählte Version: null";
+            this.lblCurrentVersion.Text = "Selected Version: null";
             // 
             // cmdShowUUID
             // 
@@ -95,7 +109,7 @@ namespace BlockLaunch.UI.Forms
             this.cmdShowUUID.Name = "cmdShowUUID";
             this.cmdShowUUID.Size = new System.Drawing.Size(200, 23);
             this.cmdShowUUID.TabIndex = 3;
-            this.cmdShowUUID.Text = "UUID anzeigen";
+            this.cmdShowUUID.Text = "Show UUID";
             this.cmdShowUUID.UseVisualStyleBackColor = true;
             this.cmdShowUUID.Click += new System.EventHandler(this.cmdShowUUID_Click);
             // 
@@ -104,6 +118,7 @@ namespace BlockLaunch.UI.Forms
             this.tbcMain.Controls.Add(this.tbpMain);
             this.tbcMain.Controls.Add(this.tbpUpdates);
             this.tbcMain.Controls.Add(this.tabLogs);
+            this.tbcMain.Controls.Add(this.tabTools);
             this.tbcMain.Location = new System.Drawing.Point(0, 0);
             this.tbcMain.Name = "tbcMain";
             this.tbcMain.SelectedIndex = 0;
@@ -131,7 +146,7 @@ namespace BlockLaunch.UI.Forms
             this.tbpMain.Padding = new System.Windows.Forms.Padding(3);
             this.tbpMain.Size = new System.Drawing.Size(1000, 679);
             this.tbpMain.TabIndex = 0;
-            this.tbpMain.Text = "Startseite";
+            this.tbpMain.Text = "Home Page";
             // 
             // pgbDownload
             // 
@@ -160,7 +175,7 @@ namespace BlockLaunch.UI.Forms
             this.cmdSettings.Name = "cmdSettings";
             this.cmdSettings.Size = new System.Drawing.Size(986, 25);
             this.cmdSettings.TabIndex = 13;
-            this.cmdSettings.Text = "Einstellungen";
+            this.cmdSettings.Text = "Settings";
             this.cmdSettings.UseVisualStyleBackColor = true;
             this.cmdSettings.Click += new System.EventHandler(this.cmdSettings_Click);
             // 
@@ -171,7 +186,7 @@ namespace BlockLaunch.UI.Forms
             this.cmdAddProfil.Name = "cmdAddProfil";
             this.cmdAddProfil.Size = new System.Drawing.Size(209, 23);
             this.cmdAddProfil.TabIndex = 12;
-            this.cmdAddProfil.Text = "Profil hinzufügen";
+            this.cmdAddProfil.Text = "Add profile";
             this.cmdAddProfil.UseVisualStyleBackColor = true;
             this.cmdAddProfil.Click += new System.EventHandler(this.cmdAddProfil_Click);
             // 
@@ -190,9 +205,9 @@ namespace BlockLaunch.UI.Forms
             this.lblProfile.AutoSize = true;
             this.lblProfile.Location = new System.Drawing.Point(792, 45);
             this.lblProfile.Name = "lblProfile";
-            this.lblProfile.Size = new System.Drawing.Size(33, 13);
+            this.lblProfile.Size = new System.Drawing.Size(39, 13);
             this.lblProfile.TabIndex = 10;
-            this.lblProfile.Text = "Profil:";
+            this.lblProfile.Text = "Profile:";
             // 
             // lblSelectVersion
             // 
@@ -220,7 +235,7 @@ namespace BlockLaunch.UI.Forms
             this.cmdLogin.Name = "cmdLogin";
             this.cmdLogin.Size = new System.Drawing.Size(986, 36);
             this.cmdLogin.TabIndex = 4;
-            this.cmdLogin.Text = "Einloggen";
+            this.cmdLogin.Text = "Login && Play";
             this.cmdLogin.UseVisualStyleBackColor = true;
             this.cmdLogin.Click += new System.EventHandler(this.cmdLogin_Click);
             // 
@@ -288,7 +303,7 @@ namespace BlockLaunch.UI.Forms
             this.tabAll.Padding = new System.Windows.Forms.Padding(3);
             this.tabAll.Size = new System.Drawing.Size(996, 657);
             this.tabAll.TabIndex = 0;
-            this.tabAll.Text = "Alle";
+            this.tabAll.Text = "All";
             this.tabAll.UseVisualStyleBackColor = true;
             // 
             // rtbLog
@@ -340,6 +355,108 @@ namespace BlockLaunch.UI.Forms
             this.rtbLogMinecraft.TabIndex = 0;
             this.rtbLogMinecraft.Text = "";
             // 
+            // tabTools
+            // 
+            this.tabTools.Controls.Add(this.grpOptifine);
+            this.tabTools.Controls.Add(this.grpConverter);
+            this.tabTools.Location = new System.Drawing.Point(4, 22);
+            this.tabTools.Name = "tabTools";
+            this.tabTools.Padding = new System.Windows.Forms.Padding(3);
+            this.tabTools.Size = new System.Drawing.Size(1000, 679);
+            this.tabTools.TabIndex = 3;
+            this.tabTools.Text = "Tools";
+            this.tabTools.UseVisualStyleBackColor = true;
+            // 
+            // grpOptifine
+            // 
+            this.grpOptifine.Controls.Add(this.rtbLogInstaller);
+            this.grpOptifine.Controls.Add(this.cmdBrowse);
+            this.grpOptifine.Controls.Add(this.txbFile);
+            this.grpOptifine.Controls.Add(this.lblOptifine);
+            this.grpOptifine.Controls.Add(this.cmdRunInstaller);
+            this.grpOptifine.Location = new System.Drawing.Point(503, 7);
+            this.grpOptifine.Name = "grpOptifine";
+            this.grpOptifine.Size = new System.Drawing.Size(489, 256);
+            this.grpOptifine.TabIndex = 1;
+            this.grpOptifine.TabStop = false;
+            this.grpOptifine.Text = "BlockLaunch-OptiFine Installer";
+            // 
+            // rtbLogInstaller
+            // 
+            this.rtbLogInstaller.Location = new System.Drawing.Point(9, 54);
+            this.rtbLogInstaller.Name = "rtbLogInstaller";
+            this.rtbLogInstaller.Size = new System.Drawing.Size(474, 161);
+            this.rtbLogInstaller.TabIndex = 4;
+            this.rtbLogInstaller.Text = "";
+            // 
+            // cmdBrowse
+            // 
+            this.cmdBrowse.Location = new System.Drawing.Point(375, 22);
+            this.cmdBrowse.Name = "cmdBrowse";
+            this.cmdBrowse.Size = new System.Drawing.Size(108, 23);
+            this.cmdBrowse.TabIndex = 3;
+            this.cmdBrowse.Text = "Browse...";
+            this.cmdBrowse.UseVisualStyleBackColor = true;
+            this.cmdBrowse.Click += new System.EventHandler(this.cmdBrowse_Click);
+            // 
+            // txbFile
+            // 
+            this.txbFile.AllowDrop = true;
+            this.txbFile.Location = new System.Drawing.Point(90, 24);
+            this.txbFile.Name = "txbFile";
+            this.txbFile.Size = new System.Drawing.Size(279, 20);
+            this.txbFile.TabIndex = 2;
+            this.txbFile.DragDrop += new System.Windows.Forms.DragEventHandler(this.txbFile_DragDrop);
+            this.txbFile.DragEnter += new System.Windows.Forms.DragEventHandler(this.txbFile_DragEnter);
+            // 
+            // lblOptifine
+            // 
+            this.lblOptifine.AutoSize = true;
+            this.lblOptifine.Location = new System.Drawing.Point(6, 27);
+            this.lblOptifine.Name = "lblOptifine";
+            this.lblOptifine.Size = new System.Drawing.Size(70, 13);
+            this.lblOptifine.TabIndex = 1;
+            this.lblOptifine.Text = "Path to JAR: ";
+            // 
+            // cmdRunInstaller
+            // 
+            this.cmdRunInstaller.Location = new System.Drawing.Point(6, 221);
+            this.cmdRunInstaller.Name = "cmdRunInstaller";
+            this.cmdRunInstaller.Size = new System.Drawing.Size(477, 29);
+            this.cmdRunInstaller.TabIndex = 0;
+            this.cmdRunInstaller.Text = "Install Optifine";
+            this.cmdRunInstaller.UseVisualStyleBackColor = true;
+            this.cmdRunInstaller.Click += new System.EventHandler(this.cmdRunInstaller_Click);
+            // 
+            // grpConverter
+            // 
+            this.grpConverter.Controls.Add(this.rtbLogConvert);
+            this.grpConverter.Controls.Add(this.cmdConvertVersion);
+            this.grpConverter.Location = new System.Drawing.Point(9, 7);
+            this.grpConverter.Name = "grpConverter";
+            this.grpConverter.Size = new System.Drawing.Size(488, 256);
+            this.grpConverter.TabIndex = 0;
+            this.grpConverter.TabStop = false;
+            this.grpConverter.Text = "BlockLaunch-Converter";
+            // 
+            // rtbLogConvert
+            // 
+            this.rtbLogConvert.Location = new System.Drawing.Point(6, 54);
+            this.rtbLogConvert.Name = "rtbLogConvert";
+            this.rtbLogConvert.Size = new System.Drawing.Size(476, 196);
+            this.rtbLogConvert.TabIndex = 2;
+            this.rtbLogConvert.Text = "";
+            // 
+            // cmdConvertVersion
+            // 
+            this.cmdConvertVersion.Location = new System.Drawing.Point(6, 19);
+            this.cmdConvertVersion.Name = "cmdConvertVersion";
+            this.cmdConvertVersion.Size = new System.Drawing.Size(476, 29);
+            this.cmdConvertVersion.TabIndex = 1;
+            this.cmdConvertVersion.Text = "Convert selected version";
+            this.cmdConvertVersion.UseVisualStyleBackColor = true;
+            this.cmdConvertVersion.Click += new System.EventHandler(this.cmdConvertVersion_Click);
+            // 
             // status
             // 
             this.status.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -355,6 +472,11 @@ namespace BlockLaunch.UI.Forms
             this.tslMain.Name = "tslMain";
             this.tslMain.Size = new System.Drawing.Size(0, 17);
             // 
+            // ofdOptifine
+            // 
+            this.ofdOptifine.FileName = "OptiFine.jar";
+            this.ofdOptifine.Filter = "Executable Jar File (*.jar)|*.jar";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -365,7 +487,7 @@ namespace BlockLaunch.UI.Forms
             this.Controls.Add(this.tbcMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
-            this.Text = "BlockLaunch - v0.1 Alpha - Hauptmenü";
+            this.Text = "BlockLaunch - v0.1 Alpha - Main Menu";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.tbcMain.ResumeLayout(false);
@@ -378,6 +500,10 @@ namespace BlockLaunch.UI.Forms
             this.tabAll.ResumeLayout(false);
             this.tabBL.ResumeLayout(false);
             this.tabMinecraft.ResumeLayout(false);
+            this.tabTools.ResumeLayout(false);
+            this.grpOptifine.ResumeLayout(false);
+            this.grpOptifine.PerformLayout();
+            this.grpConverter.ResumeLayout(false);
             this.status.ResumeLayout(false);
             this.status.PerformLayout();
             this.ResumeLayout(false);
@@ -414,6 +540,17 @@ namespace BlockLaunch.UI.Forms
         private System.Windows.Forms.RichTextBox rtbLogMinecraft;
         private System.Windows.Forms.Button cmdRefreshProfile;
         private Controls.InfoProgressBar pgbDownload;
+        private System.Windows.Forms.TabPage tabTools;
+        private System.Windows.Forms.GroupBox grpOptifine;
+        private System.Windows.Forms.GroupBox grpConverter;
+        private System.Windows.Forms.RichTextBox rtbLogInstaller;
+        private System.Windows.Forms.Button cmdBrowse;
+        private System.Windows.Forms.TextBox txbFile;
+        private System.Windows.Forms.Label lblOptifine;
+        private System.Windows.Forms.Button cmdRunInstaller;
+        private System.Windows.Forms.RichTextBox rtbLogConvert;
+        private System.Windows.Forms.Button cmdConvertVersion;
+        private System.Windows.Forms.OpenFileDialog ofdOptifine;
     }
 }
 

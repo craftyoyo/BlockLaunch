@@ -16,6 +16,8 @@ namespace BlockLaunch.Classes.JSON
         public bool ShowSnapshot { get; set; }
         [JsonProperty("savePassword")]
         public bool SavePassword { get; set; }
+        [JsonProperty("jvm_arguments")]
+        public string JvmArguments { get; set; }
         [JsonProperty("selectedProfile")]
         public Profile SelectedProfile { get; set; }
 

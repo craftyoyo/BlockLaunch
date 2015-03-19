@@ -29,25 +29,16 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dialog));
-            this.picStatus = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblDescription = new System.Windows.Forms.Label();
             this.ecpDetails = new MakarovDev.ExpandCollapsePanel.ExpandCollapsePanel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.cmdOk = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.picStatus)).BeginInit();
+            this.picStatus = new System.Windows.Forms.PictureBox();
             this.ecpDetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picStatus)).BeginInit();
             this.SuspendLayout();
-            // 
-            // picStatus
-            // 
-            this.picStatus.Location = new System.Drawing.Point(12, 12);
-            this.picStatus.Name = "picStatus";
-            this.picStatus.Size = new System.Drawing.Size(64, 64);
-            this.picStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picStatus.TabIndex = 0;
-            this.picStatus.TabStop = false;
             // 
             // lblTitle
             // 
@@ -103,6 +94,7 @@
             this.cmdOk.TabIndex = 4;
             this.cmdOk.Text = "OK";
             this.cmdOk.UseVisualStyleBackColor = true;
+            this.cmdOk.Click += new System.EventHandler(this.cmdOk_Click);
             // 
             // cmdCancel
             // 
@@ -113,6 +105,15 @@
             this.cmdCancel.TabIndex = 5;
             this.cmdCancel.Text = "Abbrechen";
             this.cmdCancel.UseVisualStyleBackColor = true;
+            // 
+            // picStatus
+            // 
+            this.picStatus.Location = new System.Drawing.Point(12, 12);
+            this.picStatus.Name = "picStatus";
+            this.picStatus.Size = new System.Drawing.Size(64, 64);
+            this.picStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picStatus.TabIndex = 0;
+            this.picStatus.TabStop = false;
             // 
             // Dialog
             // 
@@ -130,9 +131,9 @@
             this.Name = "Dialog";
             this.Text = "title";
             this.Shown += new System.EventHandler(this.Dialog_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.picStatus)).EndInit();
             this.ecpDetails.ResumeLayout(false);
             this.ecpDetails.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picStatus)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

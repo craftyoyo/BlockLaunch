@@ -38,6 +38,8 @@ namespace BlockLaunch.Classes.Language
         public string TabpageLogsBlocklaunch { get; set; }
         [JsonProperty("tabpage_logs_minecraft")]
         public string TabpageLogsMinecraft { get; set; }
+        [JsonProperty("tabpage_tools")]
+        public string TabpageTools { get; set; }
 
         [JsonProperty("welcome_back")]
         public string WelcomeBack { get; set; }
@@ -90,6 +92,46 @@ namespace BlockLaunch.Classes.Language
         public string Password { get; set; }
         [JsonProperty("profile_name")]
         public string ProfileName { get; set; }
+
+        [JsonProperty("converter")]
+        public string Converter { get; set; }
+        [JsonProperty("optifine_installer")]
+        public string Installer { get; set; }
+        [JsonProperty("convert_selected_version")]
+        public string ConvertSelectedVersion { get; set; }
+        [JsonProperty("browse")]
+        public string Browse { get; set; }
+        [JsonProperty("path_to_jar")]
+        public string PathToJar { get; set; }
+        [JsonProperty("install_optifine")]
+        public string InstallOptifine { get; set; }
+
+        [JsonProperty("crash_report")]
+        public string CrashReport { get; set; }
+        [JsonProperty("refresh_failed_title")]
+        public string RefreshFailedTitle { get; set; }
+        [JsonProperty("refresh_failed_status")]
+        public string RefreshFailedStatus { get; set; }
+        [JsonProperty("refresh_failed_details")]
+        public string RefreshFailedDetails { get; set; }
+        [JsonProperty("exception_type")]
+        public string ExceptionType { get; set; }
+        [JsonProperty("error_message")]
+        public string ErrorMessage { get; set; }
+        [JsonProperty("cause")]
+        public string Cause { get; set; }
+        [JsonProperty("conversion_required")]
+        public string ConversionRequired { get; set; }
+        [JsonProperty("conversion_status")]
+        public string ConversionStatus { get; set; }
+        [JsonProperty("conversion_details")]
+        public string ConversionDetails { get; set; }
+        [JsonProperty("download_failed_title")]
+        public string DownloadFailedTitle { get; set; }
+        [JsonProperty("download_failed_status")]
+        public string DownloadFailedStatus { get; set; }
+        [JsonProperty("download_failed_details")]
+        public string DownloadFailedDetails { get; set; }
         #endregion
     }
 }

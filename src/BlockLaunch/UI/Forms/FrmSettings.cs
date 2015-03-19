@@ -35,7 +35,8 @@ namespace BlockLaunch.UI.Forms
                 SelectedProfile = _config.SelectedProfile,
                 ShowAlpha = _config.ShowAlpha,
                 ShowBeta = _config.ShowBeta,
-                ShowSnapshot = _config.ShowSnapshot
+                ShowSnapshot = _config.ShowSnapshot,
+                JvmArguments = txbJvmArguments.Text
             };
             NewConfig = config;
         }
@@ -57,6 +58,7 @@ namespace BlockLaunch.UI.Forms
             }
             comLang.SelectedValue = _language.CountryShortcut;
             chkDontSavePassword.Checked = !_config.SavePassword;
+            txbJvmArguments.Text = _config.JvmArguments;
         }
     }
 

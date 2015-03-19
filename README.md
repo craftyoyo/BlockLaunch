@@ -10,31 +10,41 @@ It also includes most of the features from the original Launcher.
 **It's still in Beta so some features are maybe not available or not finished!**
 
 ### Version
-The current version is 0.1.1 Beta
+The current version is 0.2 Beta
 
 ### Known Issues
 
 My software have bugs like all applications. So here is a list of all (confirmed) bugs:
 
-- Doesn't support ~~Optifine~~ and Forge
 - Sometimes the config will be corrupted when closing application.
 
 ### Todo's
 
-- Add support for ~~Optifine~~ (Done) and Forge
+- ~~Add support for Optifine and Forge~~
 - Add mojang server status information
 - First Startup-Wizard
 - Plugin-System
-- Bugfixes in the solution file to make it buildable
+- ~~Bugfixes in the solution file to make it buildable~~
 
 ### Installation & Dependencies
 
-You need following to run BlockLaunch:
+You need following to run BlockLaunch & Minecraft:
+
+**BlockLaunch: **
 
 - .NET Framework 4.5
 - Windows Vista or higher
-- 256MB or more
-- Around 20MB free space
+- 256MB RAM or more
+- Around 20MB free space (for BlockLaunch)
+
+**Minecraft: **
+
+- Intel Pentium D or AMD Athlon 64 (K8) 2.6 GHz
+- 2GB RAM
+- 200MB free space
+- GPU (Integrated): Intel HD Graphics or AMD (formerly ATI) Radeon HD Graphics with OpenGL 2.1
+- GPU (Discrete): Nvidia GeForce 9600 GT or AMD Radeon HD 2400 with OpenGL 3.1
+- Java 6 Release 45 (Java 8 recommend)
 
 Download the latest version from here: [BlockLaunch - Releases](https://github.com/KaskadekingDE/BlockLaunch/releases "Releases")  
 Extract the zip with the windows built-in solution or a third-party application like WinRAR or 7-Zip.

@@ -119,7 +119,8 @@ namespace BlockLaunch.Classes.Launcher
                         SelectedProfile = null,
                         ShowAlpha = false,
                         ShowBeta = false,
-                        ShowSnapshot = false
+                        ShowSnapshot = false,
+                        JvmArguments = "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmx1G -XX:+UseConcMarkSweepGC -XX:-UseAdaptiveSizePolicy -Xmn128M"
                     };
                     var json = JsonConvert.SerializeObject(defaultConfig, Formatting.Indented);
                     sw.Write(json);

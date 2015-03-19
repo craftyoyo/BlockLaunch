@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BlockLaunch.Classes.JSON;
+using BlockLaunch.UI.Forms;
 using Newtonsoft.Json;
 
 namespace BlockLaunch.Classes.Minecraft
@@ -10,8 +11,7 @@ namespace BlockLaunch.Classes.Minecraft
     {
         public string JvmArguments(string nativePath)
         {
-            return @"-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmx1G -XX:+UseConcMarkSweepGC -XX:-UseAdaptiveSizePolicy -Xmn128M ""-Djava.library.path=" +
-                    nativePath + @""" -cp";
+            return FrmMain.ApplicationConfig.JvmArguments +  @" ""-Djava.library.path=" + nativePath + @""" -cp";
         }
 
         public string Dependencies(VersionInformation ver)
