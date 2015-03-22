@@ -25,6 +25,7 @@
     "settings": "Settings",
     "loginAndPlay": "Login and Play",
     "add_profile": "Add new profile",
+    "copy_profile": "Copy profile",
 
     "log_info": "Info",
     "log_warning": "Warning",
@@ -67,5 +68,22 @@
     "conversion_details": "Convert the version under Tools --> BlockLaunch-Converter",
     "download_failed_title": "Error while downloading Minecraft",
     "download_failed_status": "An error while downloading Minecraft occured",
-    "download_failed_details": "The server ist not available or you don't have a internet connection"
+    "download_failed_details": "The server ist not available or you don't have a internet connection",
+    "version_not_installed_title": "Version not installed!",
+    "version_not_installed_status": "Your current version is not installed!",
+    "version_not_installed_details": "Please install the version before trying to convert it.",
+    "no_parent_title": "Version does not inherit from a version!",
+    "no_parent_status": "Version does not inherit from a version!",
+    "no_parent_details": "Please convert a version that use inheritsFrom",
+    "converter_not_installed_title": "BlockLaunch-Converter not installed!",
+    "converter_not_installed_status": "BlockLaunch-Converter not installed!",
+    "installer_not_installed_title": "BlockLaunch-Optfine Installer not installed!",
+    "installer_not_installed_status": "BlockLaunch-Optfine Installer not installed!",
+    "install_tools": "Install the tools under https://github.com/KaskadekingDE/BlockLaunch/releases",
+    "profile_name_taken_title": "Profile-Name already taken.",
+    "profile_name_taken_status": "Profile-Name already taken!",
+    "profile_name_taken_details": "A profile with the same profile name already exists!",
+    "auth_failed_title": "Authentification failed!",
+    "auth_failed_status": "Failed to login to your minecraft account!",
+    "auth_failed_details": "See details for more informations."
 }

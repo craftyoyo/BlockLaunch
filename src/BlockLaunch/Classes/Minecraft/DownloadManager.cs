@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -201,7 +200,7 @@ namespace BlockLaunch.Classes.Minecraft
             bool result;
             HttpWebResponse response = null;
             var uri = new Uri(fileUrl);
-            var request = WebRequest.CreateHttp(uri);
+            var request = (HttpWebRequest) WebRequest.Create(uri);
             request.Method = "HEAD";
             request.Timeout = 5000;
             request.AllowAutoRedirect = false;

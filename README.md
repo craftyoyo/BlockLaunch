@@ -10,7 +10,7 @@ It also includes most of the features from the original Launcher.
 **It's still in Beta so some features are maybe not available or not finished!**
 
 ### Version
-The current version is 0.2 Beta
+The current version is 0.3 Beta
 
 ### Known Issues
 
@@ -21,7 +21,7 @@ My software have bugs like all applications. So here is a list of all (confirmed
 ### Todo's
 
 - ~~Add support for Optifine and Forge~~
-- Add mojang server status information
+- ~~Add mojang server status information~~
 - First Startup-Wizard
 - Plugin-System
 - ~~Bugfixes in the solution file to make it buildable~~
@@ -30,14 +30,14 @@ My software have bugs like all applications. So here is a list of all (confirmed
 
 You need following to run BlockLaunch & Minecraft:
 
-**BlockLaunch: **
+**BlockLaunch:**
 
-- .NET Framework 4.5
-- Windows Vista or higher
+- .NET Framework 4.0
+- Windows XP or higher
 - 256MB RAM or more
 - Around 20MB free space (for BlockLaunch)
 
-**Minecraft: **
+**Minecraft:**
 
 - Intel Pentium D or AMD Athlon 64 (K8) 2.6 GHz
 - 2GB RAM
@@ -55,6 +55,7 @@ Now run the BlockLaunch.exe and type in your mojang credentials.
 
 Thanks to:
 
+- Sven Walter and Dennis Magno for MetroFramework (ModernUI) licensed under MIT
 - Dominic Beger (Trade) for nUpdate licensed under SugarCRM
 - jamesnk for JSON.NET licensed under MIT
 - ICSharpCode for SharpZipLib licensed under GPL

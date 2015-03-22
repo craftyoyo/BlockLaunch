@@ -1,64 +1,54 @@
 ﻿using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using MetroFramework;
+using MetroFramework.Controls;
+using MetroFramework.Drawing;
 
 namespace BlockLaunch.UI.Controls
 {
-    public enum ProgressMode
+    public class InfoProgressBar : MetroProgressBar
     {
-        CustomText,
-        Percentage
-    }
+        public new string ProgressPercentText { get; set; }
 
-    public class InfoProgressBar : ProgressBar
-    {
-        [DllImport("uxtheme.dll")]
-        private static extern int SetWindowTheme(IntPtr hWnd, string appname, string idlist);
-
-        private Brush _defaultTextColor = Brushes.Black;
-        private Font _defaultFont = new Font(FontFamily.GenericSerif, 10);
-
-        public ProgressMode TextProgressMode { get; set; }
-        public string CustomText { get; set; }
-
-        public Font TextFont
+        private double ProgressBarWidth
         {
-            get { return _defaultFont; }
-            set { _defaultFont = value; }
+            get { return (((double)Value / Maximum) * ClientRectangle.Width); }
         }
 
-        public Brush TextColor
+        private  void DrawProgressContinuous(Graphics graphics)
         {
-            get { return _defaultTextColor; }
-            set { _defaultTextColor = value; }
+            graphics.FillRectangle(MetroPaint.GetStyleBrush(Style), 0, 0, (int)ProgressBarWidth, ClientRectangle.Height);
         }
 
-        public InfoProgressBar()
+        protected override void OnPaintForeground(PaintEventArgs e)
         {
-            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer, true);
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            var rect = ClientRectangle;
-            var g = e.Graphics;
-            ProgressBarRenderer.DrawHorizontalBar(g, rect);
-            rect.Inflate(-3, -3);
-            if (Value > 0 && Value <= Maximum)
-            {
-                var clip = new Rectangle(rect.X, rect.Y, (int)(((float)Value / (float)Maximum) * rect.Width), rect.Height);
-                ProgressBarRenderer.DrawHorizontalChunks(g, clip);
+            if (ProgressBarStyle == ProgressBarStyle.Continuous)
+            {            
+                DrawProgressContinuous(e.Graphics);
             }
-            var txt = TextProgressMode == ProgressMode.Percentage ? Value + " %" : CustomText;
-            var drawFormat = new StringFormat {Alignment = StringAlignment.Center};
-            g.DrawString(txt, TextFont, TextColor, rect, drawFormat);
+            else if (ProgressBarStyle == ProgressBarStyle.Blocks)
+            {
+               throw new NotSupportedException("This style is not supported!");
+            }
+            else if (ProgressBarStyle == ProgressBarStyle.Marquee)
+            {
+                throw new NotSupportedException("This style is not supported!");
+            }
+            DrawProgressText(e.Graphics);
+            using (var p = new Pen(MetroPaint.BorderColor.ProgressBar.Normal(Theme)))
+            {
+                var borderRect = new Rectangle(0, 0, Width - 1, Height - 1);
+                e.Graphics.DrawRectangle(p, borderRect);
+            }
+            OnCustomPaintForeground(new MetroPaintEventArgs(Color.Empty, Color.Empty, e.Graphics));
         }
 
-        protected override void OnHandleCreated(EventArgs e)
+        private void DrawProgressText(IDeviceContext graphics)
         {
-            SetWindowTheme(Handle, "", "");
-            base.OnHandleCreated(e);
+            if (HideProgressText) return;
+            var foreColor = !Enabled ? MetroPaint.ForeColor.ProgressBar.Disabled(Theme) : MetroPaint.ForeColor.ProgressBar.Normal(Theme);
+            TextRenderer.DrawText(graphics, ProgressPercentText, MetroFonts.ProgressBar(FontSize, FontWeight), ClientRectangle, foreColor, MetroPaint.GetTextFormatFlags(TextAlign));
         }
     }
 }

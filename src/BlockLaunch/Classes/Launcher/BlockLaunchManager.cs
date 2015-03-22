@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Security.Permissions;
+using System.Text;
 using BlockLaunch.Classes.JSON;
 using Newtonsoft.Json;
 
@@ -31,15 +32,13 @@ namespace BlockLaunch.Classes.Launcher
             }
         }
 
-        
-
         #region Config
         public Config LoadConfig()
         {
             string json;
             using (var fs = new FileStream("config.json", FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
             {
-                using (var sw = new StreamReader(fs))
+                using (var sw = new StreamReader(fs, Encoding.ASCII))
                 {
                     json = sw.ReadToEnd();
                 }
@@ -53,7 +52,7 @@ namespace BlockLaunch.Classes.Launcher
             string json;
             using (var fs = new FileStream("profiles.json", FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read))
             {
-                using (var sw = new StreamReader(fs))
+                using (var sw = new StreamReader(fs, Encoding.ASCII))
                 {
                     json = sw.ReadToEnd();
                 }
@@ -66,7 +65,7 @@ namespace BlockLaunch.Classes.Launcher
             var json = JsonConvert.SerializeObject(config, Formatting.Indented);
             using (var fs = new FileStream("config.json", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
             {
-                using (var sw = new StreamWriter(fs))
+                using (var sw = new StreamWriter(fs, Encoding.ASCII))
                 {
                     sw.Write(json);
                 }
@@ -78,7 +77,7 @@ namespace BlockLaunch.Classes.Launcher
             var json = JsonConvert.SerializeObject(profiles, Formatting.Indented);
             using (var fs = new FileStream("profiles.json", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
             {
-                using (var sw = new StreamWriter(fs))
+                using (var sw = new StreamWriter(fs, Encoding.ASCII))
                 {
                     sw.Write(json);
                 }
@@ -115,12 +114,15 @@ namespace BlockLaunch.Classes.Launcher
                     var defaultConfig = new Config()
                     {
                         SavePassword = false,
+                        Style = "Default",
+                        Theme = "Default",
                         Language = "EN",
                         SelectedProfile = null,
                         ShowAlpha = false,
                         ShowBeta = false,
                         ShowSnapshot = false,
-                        JvmArguments = "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmx1G -XX:+UseConcMarkSweepGC -XX:-UseAdaptiveSizePolicy -Xmn128M"
+                        JvmArguments = "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmx%mG -XX:+UseConcMarkSweepGC -XX:-UseAdaptiveSizePolicy -Xmn128M",
+                        Memory = 1
                     };
                     var json = JsonConvert.SerializeObject(defaultConfig, Formatting.Indented);
                     sw.Write(json);

@@ -58,7 +58,10 @@ namespace BlockLaunch.Classes.Minecraft
                                   "-" + native + ".jar";
                      shaFile = jarFile + ".sha1";
                 }
-                result.Add(jarFile, shaFile);
+                if (!result.ContainsKey(jarFile))
+                {
+                    result.Add(jarFile, shaFile);
+                }
             }
             return result;
         }
@@ -115,7 +118,10 @@ namespace BlockLaunch.Classes.Minecraft
                                  "-" + native + ".jar" + launchChar;
                     shaFile = jarFile + ".sha";
                 }
-                result.Add(jarFile, shaFile);
+                if (!result.ContainsKey(jarFile))
+                {
+                    result.Add(jarFile, shaFile);
+                }
             }
             return result;
         } 

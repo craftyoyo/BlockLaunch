@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -39,9 +38,9 @@ namespace BlockLaunch.Optifine
             UpdateJson(_output1, _output2);
         }
 
-        private static bool TestForValidJar(IReadOnlyList<string> args)
+        private static bool TestForValidJar(string[] args)
         {
-            if (args.Count == 0)
+            if (args.Length == 0)
             {
                 Console.WriteLine("Drag & Drop the Optifine JAR on the EXE File to install Optifine!");
                 Console.ReadKey();

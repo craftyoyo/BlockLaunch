@@ -7,11 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BlockLaunch.Classes;
 using BlockLaunch.Classes.Language;
+using BlockLaunch.UI.Forms;
+using MetroFramework.Forms;
 
 namespace BlockLaunch.UI.Dialogs
 {
-    public partial class Dialog : Form
+    public partial class Dialog : MetroForm
     {
         private readonly StatusMode _mode;
         private readonly string _title;
@@ -35,20 +38,6 @@ namespace BlockLaunch.UI.Dialogs
             _description = statusDescription;
             _details = details;
             _language = language;
-        }
-
-        [Obsolete("Deprecated: Please use the new constructor (StatusMode, string, string, Language, string)")]
-        public Dialog(StatusMode mode, string title, string statusTitle, string statusDescription, string ok,
-            string cancel, string details = null)
-        {
-            InitializeComponent();
-            _mode = mode;
-            _title = title;
-            _statusTitle = statusTitle;
-            _description = statusDescription;
-            var language = new Language {Ok = ok, Cancel = cancel};
-            _language = language;
-            _details = details;
         }
 
         private void ecpDetails_ExpandCollapse(object sender, MakarovDev.ExpandCollapsePanel.ExpandCollapseEventArgs e)
@@ -80,9 +69,9 @@ namespace BlockLaunch.UI.Dialogs
             }
         }
 
-        private void cmdOk_Click(object sender, EventArgs e)
+        private void Dialog_Load(object sender, EventArgs e)
         {
-
+            ThemeHelper.ApplyTheme(this, FrmMain.ApplicationConfig);
         }
     }
 }

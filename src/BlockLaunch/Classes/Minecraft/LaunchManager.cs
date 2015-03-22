@@ -11,7 +11,7 @@ namespace BlockLaunch.Classes.Minecraft
     {
         public string JvmArguments(string nativePath)
         {
-            return FrmMain.ApplicationConfig.JvmArguments +  @" ""-Djava.library.path=" + nativePath + @""" -cp";
+            return FrmMain.ApplicationConfig.JvmArguments.Replace("%m", FrmMain.ApplicationConfig.Memory.ToString()) +  @" ""-Djava.library.path=" + nativePath + @""" -cp";
         }
 
         public string Dependencies(VersionInformation ver)

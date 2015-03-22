@@ -9,6 +9,7 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using BlockLaunch.Classes;
 using BlockLaunch.Classes.JSON;
 using BlockLaunch.Classes.JSON.Login.Authentificate;
 using BlockLaunch.Classes.JSON.Login.Refresh;
@@ -19,18 +20,18 @@ using BlockLaunch.UI.Dialogs;
 using Microsoft.Win32;
 using nUpdate.Updating;
 using Newtonsoft.Json;
+using MetroFramework.Forms;
 
 namespace BlockLaunch.UI.Forms
 {
-    public partial class FrmMain : Form
+    public partial class FrmMain : MetroForm
     {
         #region Values
-
         public static BlockLaunchManager Manager = BlockLaunchManager.Instance;
         private static Config _config;
         public static Language ApplicationLanguage;
         public static List<Language> AvailableLanguages;
-        public static List<Profile> AvailableProfiles;
+        private static List<Profile> _availableProfiles;
         public static List<Classes.JSON.Version> AvailableVersions;
         public static VersionData LatestVersion;
 
@@ -53,7 +54,7 @@ namespace BlockLaunch.UI.Forms
 
         private bool _playerCachedForThisSession;
 
-        private readonly UpdateManager _updater = new UpdateManager(new Uri("http://kaskade-dev.cwsurf.de/projects/blocklaunch/updates.json"), "<RSAKeyValue><Modulus>wUv6rCdDcaZA4reehYFfZblqa5AVxs8ODyRTNgq2v/aGtiUqY8VSd1rBjRlPjUQY87sDq9T0KZWaOJMQRIxsva5IGrfhf917wA300Db7WudKvVfGQsBb0ng834C0WpNxRDhMtfa4HeDA9YuGUJITPotxgJ6rvrZrkqjUH4RXVkf+4Yy/6dBtOlozxO12xd8fGbNCHa4vsfyI1uKikiFyO0r4h8uzY+x3Fs9O30vuTUOewJrEWlBBodm/BvmiuYbOprsINckGhcLeX4Nq40hoSB0caPXFr1tBcGSS/sQ4z8yOkacWMixHImToecABy+tGVXP4S2xu2yf4IRx0dJLg2y6/vpEl6/2829IvrsVIAJI8Y5X/uFrZweitwKhBRN1OaNa3dTAluEVqBHwAkr0A7fmZsv4Q48KpmHlClnqwW3qscPT59j7WUHUV+Cs2qL1rBHmBhWkHL9oSUA04ztCA6a6pz2D/5Hcs5MYXrS+Im6LdK0C2QG9OrJXZ3W7yTmA3ObDSWuOgT8s+DDof1yMePySAQmHDgklx76mDQ2GFJpjC2o5YH5XpoTMrH5yjvbh6GF2ojSkM5z504I9T0CyfLBRyz7Rydh9FtS5jEwWcp014X5c16LkFF+g4AtxMaFGk3NXIomqlLaUH9d7ON21j5T9nEAqpZLWz0WEauFzIDzPtOLDOvScsqlJl4ekWg4skF2ccVeaVPf03AIx+mmCU1Z4oHdqVTHB9V6vVeAbghwze+Fm9Fh/t2ApxBZIw08cKyXp+LQF0U7856b5aOkQbeM32o2PvCFqf7oa18bHTBLcMziv0OVmQK2gGAsK/LMZRmdfsHVmIatVzEv/q3nZ5uhOGhxYUYImqmZqWUP07IJMEWNc/J4/PLLQZtNG9SABNZnDKFm5Ii5eDpGBW5rA6IDmqZjK1qArFQFFhgc7sPxTucErTT6WlmS1zgZV0imqy44kuZxEQEgffD2HU0F78xI3rBwY5+rcwNYiIqysXRxCuyfD4rP24ruOBCJboY6pV5xJRUhQ1cxgGJ/NYB3F7n8f/RcWgVgFvh5BgZijOoGIrMu1YmZ39PUBmh2qdtmloySQzXfh5j81JTvBQLosJxq0DrFVoBNyiymcUyZkK76sUKd1c97NRF4R/opnNWD6PmgP2VP+h9GGmJQMEfRBkMT818JdLgBHY5xVcrn/+xZVxrxi4+gF7Ahu+EzXt8DPVAKqaHjeoV1oRCczMQCuJNS0Eyivnz68p/UfhD7cWyV7TrCYcN4ONv0jIA2qNIBiomtQxXIiP7XB+9EHQxvxvlQ0DgBySwK3nds1wLCjnQTBoTKyEizKi75J8iKwA8gXqWQpSQ/H3rGJ9cmrRFmhgHw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>", new UpdateVersion("0.1.2.0b1"), new CultureInfo("de-DE"));
+        private readonly UpdateManager _updater = new UpdateManager(new Uri("http://kaskade-dev.cwsurf.de/projects/blocklaunch/updates.json"), "<RSAKeyValue><Modulus>wUv6rCdDcaZA4reehYFfZblqa5AVxs8ODyRTNgq2v/aGtiUqY8VSd1rBjRlPjUQY87sDq9T0KZWaOJMQRIxsva5IGrfhf917wA300Db7WudKvVfGQsBb0ng834C0WpNxRDhMtfa4HeDA9YuGUJITPotxgJ6rvrZrkqjUH4RXVkf+4Yy/6dBtOlozxO12xd8fGbNCHa4vsfyI1uKikiFyO0r4h8uzY+x3Fs9O30vuTUOewJrEWlBBodm/BvmiuYbOprsINckGhcLeX4Nq40hoSB0caPXFr1tBcGSS/sQ4z8yOkacWMixHImToecABy+tGVXP4S2xu2yf4IRx0dJLg2y6/vpEl6/2829IvrsVIAJI8Y5X/uFrZweitwKhBRN1OaNa3dTAluEVqBHwAkr0A7fmZsv4Q48KpmHlClnqwW3qscPT59j7WUHUV+Cs2qL1rBHmBhWkHL9oSUA04ztCA6a6pz2D/5Hcs5MYXrS+Im6LdK0C2QG9OrJXZ3W7yTmA3ObDSWuOgT8s+DDof1yMePySAQmHDgklx76mDQ2GFJpjC2o5YH5XpoTMrH5yjvbh6GF2ojSkM5z504I9T0CyfLBRyz7Rydh9FtS5jEwWcp014X5c16LkFF+g4AtxMaFGk3NXIomqlLaUH9d7ON21j5T9nEAqpZLWz0WEauFzIDzPtOLDOvScsqlJl4ekWg4skF2ccVeaVPf03AIx+mmCU1Z4oHdqVTHB9V6vVeAbghwze+Fm9Fh/t2ApxBZIw08cKyXp+LQF0U7856b5aOkQbeM32o2PvCFqf7oa18bHTBLcMziv0OVmQK2gGAsK/LMZRmdfsHVmIatVzEv/q3nZ5uhOGhxYUYImqmZqWUP07IJMEWNc/J4/PLLQZtNG9SABNZnDKFm5Ii5eDpGBW5rA6IDmqZjK1qArFQFFhgc7sPxTucErTT6WlmS1zgZV0imqy44kuZxEQEgffD2HU0F78xI3rBwY5+rcwNYiIqysXRxCuyfD4rP24ruOBCJboY6pV5xJRUhQ1cxgGJ/NYB3F7n8f/RcWgVgFvh5BgZijOoGIrMu1YmZ39PUBmh2qdtmloySQzXfh5j81JTvBQLosJxq0DrFVoBNyiymcUyZkK76sUKd1c97NRF4R/opnNWD6PmgP2VP+h9GGmJQMEfRBkMT818JdLgBHY5xVcrn/+xZVxrxi4+gF7Ahu+EzXt8DPVAKqaHjeoV1oRCczMQCuJNS0Eyivnz68p/UfhD7cWyV7TrCYcN4ONv0jIA2qNIBiomtQxXIiP7XB+9EHQxvxvlQ0DgBySwK3nds1wLCjnQTBoTKyEizKi75J8iKwA8gXqWQpSQ/H3rGJ9cmrRFmhgHw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>", new UpdateVersion("0.3.0.0b1"), new CultureInfo("de-DE"));
 
         public static Config ApplicationConfig
         {
@@ -66,7 +67,56 @@ namespace BlockLaunch.UI.Forms
             }
         }
 
+        public static List<Profile> AvailableProfiles
+        {
+            get { return _availableProfiles; }
+            set
+            {
+                _availableProfiles = value;
+                if (_availableProfiles != null)
+                {
+                    Manager.SaveProfiles(_availableProfiles);
+                }
+            }
+        }
 
+
+        #endregion
+
+        #region Game-Management
+
+        public void LoadServerStatus()
+        {
+            const string authentificationServer = "authserver.mojang.com";
+            const string accountsServer = "account.mojang.com";
+            const string minecraftSession = "session.minecraft.net";
+            const string mojangSession = "sessionserver.mojang.com";
+            const string skinsServer = "skins.minecraft.net";
+            const string statusServer = "http://status.mojang.com/check?service=";
+
+            string status;
+            var resultAuth = LoginManager.GetRequest(statusServer + authentificationServer, out status);
+            var resultAccount = LoginManager.GetRequest(statusServer + accountsServer, out status);
+            var resultMinecraftSession = LoginManager.GetRequest(statusServer + minecraftSession, out status);
+            var resultMojangSession = LoginManager.GetRequest(statusServer + mojangSession, out status);
+            var resultSkins = LoginManager.GetRequest(statusServer + skinsServer, out status);
+
+            resultAuth = resultAuth.Contains("green") ? "Online" : "Offline";
+            resultAccount = resultAccount.Contains("green") ? "Online" : "Offline";
+            resultMinecraftSession = resultMinecraftSession.Contains("green") ? "Online" : "Offline";
+            resultMojangSession = resultMojangSession.Contains("green") ? "Online" : "Offline";
+            resultSkins = resultSkins.Contains("green") ? "Online" : "Offline";
+
+            toolInfo.SetToolTip(picAuth, "Authentification Server: " + resultAuth);
+            toolInfo.SetToolTip(picAccounts, "Accounts Server: " + resultAccount);
+            toolInfo.SetToolTip(picSession, "Minecraft Session Server: " + resultMinecraftSession + Environment.NewLine + "Mojang Session Server: " + resultMojangSession);
+            toolInfo.SetToolTip(picSkins, "Skins Server: " + resultSkins);
+
+            picAuth.Image = resultAuth == "Online" ? Properties.Resources.redstone_on : Properties.Resources.redstone_off;
+            picAccounts.Image = resultAccount == "Online" ? Properties.Resources.redstone_on : Properties.Resources.redstone_off;
+            picSession.Image = resultMojangSession == "Online" ? Properties.Resources.redstone_on : Properties.Resources.redstone_off;
+            picSkins.Image = resultSkins == "Online" ? Properties.Resources.redstone_on : Properties.Resources.redstone_off;
+        }
         #endregion
 
         #region Constructor
@@ -81,9 +131,104 @@ namespace BlockLaunch.UI.Forms
             ckbVersions.ValueMember = "Version";
             ckbVersions.DisplayMember = "TypeAndName";
             OnProfileChanged += ProfileHasChanged;
-            pgbDownload.TextColor = Brushes.Black;
+            
         }
         #endregion
+
+        #region Form-Events
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Manager = null;
+            ApplicationConfig = null;
+            ApplicationLanguage = null;
+            GC.Collect();
+        }
+
+        private void FrmMain_Load(object sender, EventArgs e)
+        {
+            var message = Manager.LogMessage("Initializing BlockLaunch...", BlockLaunchManager.LogMode.Information, true,
+                _initializingLanguage);
+            AppendBlocklaunchLog(message);
+            LoadConfig();
+            message = Manager.LogMessage("Loading language...", BlockLaunchManager.LogMode.Information, true,
+                _initializingLanguage);
+            AppendBlocklaunchLog(message);
+            LoadLanguage();
+            message = Manager.LogMessage("Loading theme & style...", BlockLaunchManager.LogMode.Information, true,
+               _initializingLanguage);
+            AppendBlocklaunchLog(message);
+            ThemeHelper.ApplyTheme(this, ApplicationConfig);
+            message = Manager.LogMessage("Loading versions...", BlockLaunchManager.LogMode.Information, true,
+                ApplicationLanguage);
+            AppendBlocklaunchLog(message);
+            LoadVersions();
+            LoadCustomVersions();
+            message = Manager.LogMessage("Loading profiles...", BlockLaunchManager.LogMode.Information, true,
+                ApplicationLanguage);
+            AppendBlocklaunchLog(message);
+            LoadProfiles();
+            message = Manager.LogMessage("Loading server status...", BlockLaunchManager.LogMode.Information, true,
+                ApplicationLanguage);
+            AppendBlocklaunchLog(message);
+            LoadServerStatus();
+            message = Manager.LogMessage("Caching player name & loading profile image...", BlockLaunchManager.LogMode.Information, true,
+                ApplicationLanguage);
+            AppendBlocklaunchLog(message);
+            var name = LoginManager.GetPlayerName(ApplicationConfig.SelectedProfile.Uuid);
+            LoadImage(name ?? ApplicationConfig.SelectedProfile.CachedUsername);
+            SearchForUpdates();
+            _initializing = false;
+        }
+        #endregion
+
+        #region Profile-Management
+
+        private void LoadProfiles()
+        {
+            var profiles = Manager.LoadProfiles();
+            if (profiles == null || profiles.Count == 0)
+            {
+                CreateNewProfile();
+                profiles = Manager.LoadProfiles();
+            }
+            if (ApplicationConfig.SelectedProfile == null)
+            {
+                ApplicationConfig.SelectedProfile = profiles.First();
+            }
+            AvailableProfiles = profiles;
+            if (!ApplicationConfig.SavePassword && !_playerCachedForThisSession)
+            {
+                var profile = ApplicationConfig.SelectedProfile;
+                ChangeProfile(ref profile);
+            }
+            else if (ApplicationConfig.SavePassword && ApplicationConfig.SelectedProfile.Password == null)
+            {
+                var profile = ApplicationConfig.SelectedProfile;
+                ChangeProfile(ref profile);
+            }
+
+            if (AvailableProfiles != null)
+            {
+                foreach (var data in AvailableProfiles)
+                {
+                    var addItemToList = true;
+                    if (ProfileSource.Count != 0)
+                    {
+                        if (ProfileSource.Cast<object>().Select((t, i) => (ProfileData)ProfileSource.List[i]).Any(currentData => currentData.UserProfile == data && currentData.ProfileName == data.ProfileName))
+                        {
+                            addItemToList = false;
+                        }
+                    }
+                    if (!addItemToList) continue;
+                    var profileData = new ProfileData(data.ProfileName, data);
+                    ProfileSource.Add(profileData);
+                }
+            }
+            ckbProfiles.SelectedValue = ApplicationConfig.SelectedProfile;
+            CachePlayerName(ApplicationConfig.SelectedProfile);
+            SelectProfile(ApplicationConfig.SelectedProfile);
+            Manager.SaveProfiles(AvailableProfiles);
+        }
 
         private static void RemoveProfile(Profile profile)
         {
@@ -111,37 +256,9 @@ namespace BlockLaunch.UI.Forms
             AvailableProfiles.Remove(profile);
         }
 
-        private void FrmMain_Load(object sender, EventArgs e)
-        {
-            var message = Manager.LogMessage("Initializing BlockLaunch...", BlockLaunchManager.LogMode.Information, true,
-                _initializingLanguage);
-            AppendBlocklaunchLog(message);
-            LoadConfig();
-            message = Manager.LogMessage("Loading language...", BlockLaunchManager.LogMode.Information, true,
-                _initializingLanguage);
-            AppendBlocklaunchLog(message);
-            LoadLanguage();
-            message = Manager.LogMessage("Loading versions...", BlockLaunchManager.LogMode.Information, true,
-                ApplicationLanguage);
-            AppendBlocklaunchLog(message);
-            LoadVersions();
-            LoadCustomVersions();
-            message = Manager.LogMessage("Loading profiles...", BlockLaunchManager.LogMode.Information, true,
-                ApplicationLanguage);
-            AppendBlocklaunchLog(message);
-            LoadProfiles();
-            message = Manager.LogMessage("Caching player name & loading profile image...", BlockLaunchManager.LogMode.Information, true,
-                ApplicationLanguage);
-            AppendBlocklaunchLog(message);
-            var name = LoginManager.GetPlayerName(ApplicationConfig.SelectedProfile.Uuid);
-            LoadImage(name ?? ApplicationConfig.SelectedProfile.CachedUsername);
-            SearchForUpdates();
-            _initializing = false;
-        }
-
         private void ChangeProfile(ref Profile profile)
         {
-            var login = new FrmLogin(ApplicationLanguage, AvailableProfiles, false, profile);
+            var login = new FrmLogin(ApplicationLanguage, AvailableProfiles, FrmLogin.LoginMode.EditProfile, profile);
             login.ShowDialog();
             profile.CachedUsername = login.UserProfile.CachedUsername;
             profile.AccessToken = login.UserProfile.AccessToken;
@@ -171,7 +288,28 @@ namespace BlockLaunch.UI.Forms
             if (OnProfileChanged != null) OnProfileChanged();
             SelectProfile(login.UserProfile);
             Manager.SaveProfiles(AvailableProfiles);
+        }
 
+        private void CopyProfile()
+        {
+            var login = new FrmLogin(ApplicationLanguage, AvailableProfiles, FrmLogin.LoginMode.CopyProfile, ApplicationConfig.SelectedProfile);
+            login.ShowDialog();
+            if (login.UserProfile == null)
+            {
+                return;
+            }
+            if (AvailableProfiles == null)
+            {
+                AvailableProfiles = new List<Profile>();
+            }
+            _playerCachedForThisSession = false;
+            AvailableProfiles.Add(login.UserProfile);
+            var data = new ProfileData(login.UserProfile.ProfileName, login.UserProfile);
+            ProfileSource.Add(data);
+            ApplicationConfig.SelectedProfile = login.UserProfile;
+            if (OnProfileChanged != null) OnProfileChanged();
+            SelectProfile(login.UserProfile);
+            Manager.SaveProfiles(AvailableProfiles);
         }
 
         private void SelectProfile(Profile profile)
@@ -198,6 +336,37 @@ namespace BlockLaunch.UI.Forms
             cmdLogin.Enabled = true;
         }
 
+        public void ProfileHasChanged()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(ProfileHasChanged));
+                return;
+            }
+            var profileInList = FindOldProfile(ApplicationConfig.SelectedProfile);
+            if (profileInList == null)
+                return;
+            RemoveProfile(profileInList);
+            profileInList = ApplicationConfig.SelectedProfile;
+            var data = new ProfileData(profileInList.ProfileName, profileInList);
+            if (ItemAlreadyAdded(profileInList)) return;
+            AvailableProfiles.Add(profileInList);
+            ProfileSource.Add(data);
+        }
+
+        private static Profile FindOldProfile(Profile newProfile)
+        {
+            var result = AvailableProfiles.Find(x => x.ProfileName == newProfile.ProfileName);
+            return result;
+        }
+
+        private static bool ItemAlreadyAdded(Profile profile)
+        {
+            return (from object t in ProfileSource select (ProfileData)ProfileSource[0]).Any(data => data.UserProfile == profile);
+        }
+        #endregion
+
+        #region Version-Management
         private static int FindIndexVersion(Classes.JSON.Version ver)
         {
             for (var i = 0; i < VersionSource.Count; i++)
@@ -255,7 +424,7 @@ namespace BlockLaunch.UI.Forms
                 VersionSource.Add(data);
             }
         }
-        
+
         private void LoadCustomVersions()
         {
             if (!Directory.Exists(@"minecraft\versions")) return;
@@ -286,54 +455,9 @@ namespace BlockLaunch.UI.Forms
             return AvailableVersions.Any(ver => ver.Id == vf.Id);
         }
 
+        #endregion
 
-        private void LoadProfiles()
-        {
-            var profiles = Manager.LoadProfiles();
-            if (profiles == null || profiles.Count == 0)
-            {
-                CreateNewProfile();
-                profiles = Manager.LoadProfiles();
-            }
-            if (ApplicationConfig.SelectedProfile == null)
-            {
-                ApplicationConfig.SelectedProfile = profiles.First();
-            }
-            AvailableProfiles = profiles;
-            if (!ApplicationConfig.SavePassword && !_playerCachedForThisSession)
-            {
-                var profile = ApplicationConfig.SelectedProfile;
-                ChangeProfile(ref profile);
-            }
-            else if (ApplicationConfig.SavePassword && ApplicationConfig.SelectedProfile.Password == null)
-            {
-                var profile = ApplicationConfig.SelectedProfile;
-                ChangeProfile(ref profile);
-            }
-
-            if (AvailableProfiles != null)
-            {
-                foreach (var data in AvailableProfiles)
-                {
-                    var addItemToList = true;
-                    if (ProfileSource.Count != 0)
-                    {
-                        if (ProfileSource.Cast<object>().Select((t, i) => (ProfileData)ProfileSource.List[i]).Any(currentData => currentData.UserProfile == data && currentData.ProfileName == data.ProfileName))
-                        {
-                            addItemToList = false;
-                        }
-                    }
-                    if (!addItemToList) continue;
-                    var profileData = new ProfileData(data.ProfileName, data);
-                    ProfileSource.Add(profileData);
-                }
-            }
-            ckbProfiles.SelectedValue = ApplicationConfig.SelectedProfile;
-            CachePlayerName(ApplicationConfig.SelectedProfile);
-            SelectProfile(ApplicationConfig.SelectedProfile);
-            Manager.SaveProfiles(AvailableProfiles);
-        }
-
+        #region Launcher-Management
         private void LoadLanguage()
         {
             var languages = Manager.LoadLanguages();
@@ -375,16 +499,6 @@ namespace BlockLaunch.UI.Forms
                 Environment.Exit(5);
             }
             ApplicationConfig = Manager.LoadConfig();
-
-        }
-
-        private void LoadImage(string username)
-        {
-            var downloader = new WebClient { Proxy = null };
-            var byteImage = downloader.DownloadData("http://achievecraft.com/tools/avatar/64/" + username + ".png");
-            var ms = new MemoryStream(byteImage);
-            var returnImage = Image.FromStream(ms);
-            ptbAvatar.Image = returnImage;
         }
 
         private void SearchForUpdates()
@@ -399,34 +513,6 @@ namespace BlockLaunch.UI.Forms
             _updater.UseHiddenSearch = true;
             var updaterui = new UpdaterUi(_updater);
             updaterui.ShowUserInterface();
-        }
-
-        private void CachePlayerName(Profile profile)
-        {
-            if (_playerCachedForThisSession) return;
-            var result = LoginManager.GetPlayerName(profile.Uuid);
-            if (result != null)
-            {
-                _playerCachedForThisSession = true;
-            }
-        }
-
-        private string GetPlayerName(string uuid)
-        {
-            var result = LoginManager.GetPlayerName(uuid);
-            if (result != null)
-            {
-                if (result != ApplicationConfig.SelectedProfile.CachedUsername)
-                {
-                    ApplicationConfig.SelectedProfile.CachedUsername = result;
-                    if (OnProfileChanged != null) OnProfileChanged();
-                    LoadImage(result);
-                    return result;
-                }
-                return result;
-            }
-
-            return ApplicationConfig.SelectedProfile.CachedUsername;
         }
 
         private void AppendBlocklaunchLog(string message)
@@ -494,7 +580,7 @@ namespace BlockLaunch.UI.Forms
             tabAll.Text = ApplicationLanguage.TabpageLogsAll;
             tabMinecraft.Text = ApplicationLanguage.TabpageLogsMinecraft;
             tabTools.Text = ApplicationLanguage.TabpageTools;
-            grpOptifine.Text = ApplicationLanguage.Installer;
+            grpOptifine.Text = ApplicationLanguage.OptifineInstaller;
             grpConverter.Text = ApplicationLanguage.Converter;
             cmdConvertVersion.Text = ApplicationLanguage.ConvertSelectedVersion;
             cmdBrowse.Text = ApplicationLanguage.Browse;
@@ -510,33 +596,63 @@ namespace BlockLaunch.UI.Forms
             cmdRefreshProfile.Text = ApplicationLanguage.RefreshProfile;
         }
 
-        public void ProfileHasChanged()
+        
+        #endregion
+
+        #region Player-Management
+        private void LoadImage(string username)
         {
-            if (InvokeRequired)
+            var downloader = new WebClient { Proxy = null };
+            var byteImage = downloader.DownloadData("http://achievecraft.com/tools/avatar/64/" + username + ".png");
+            var ms = new MemoryStream(byteImage);
+            var returnImage = Image.FromStream(ms);
+            ptbAvatar.Image = returnImage;
+        }
+
+
+
+        private void CachePlayerName(Profile profile)
+        {
+            if (_playerCachedForThisSession) return;
+            var result = LoginManager.GetPlayerName(profile.Uuid);
+            if (result != null)
             {
-                Invoke(new Action(ProfileHasChanged));
-                return;
+                _playerCachedForThisSession = true;
             }
-            var profileInList = FindOldProfile(ApplicationConfig.SelectedProfile);
-            if (profileInList == null)
-                return;
-            RemoveProfile(profileInList);
-            profileInList = ApplicationConfig.SelectedProfile;
-            var data = new ProfileData(profileInList.ProfileName, profileInList);
-            if (ItemAlreadyAdded(profileInList)) return;
-            AvailableProfiles.Add(profileInList);
-            ProfileSource.Add(data);
         }
 
-        private static Profile FindOldProfile(Profile newProfile)
+        private string GetPlayerName(string uuid)
         {
-            var result = AvailableProfiles.Find(x => x.ProfileName == newProfile.ProfileName);
-            return result;
-        }
+            var result = LoginManager.GetPlayerName(uuid);
+            if (result != null)
+            {
+                if (result != ApplicationConfig.SelectedProfile.CachedUsername)
+                {
+                    ApplicationConfig.SelectedProfile.CachedUsername = result;
+                    if (OnProfileChanged != null) OnProfileChanged();
+                    LoadImage(result);
+                    return result;
+                }
+                return result;
+            }
 
-        private static bool ItemAlreadyAdded(Profile profile)
+            return ApplicationConfig.SelectedProfile.CachedUsername;
+        }
+        #endregion
+
+        #region Login
+
+        private static string JavaPath()
         {
-            return (from object t in ProfileSource select (ProfileData)ProfileSource[0]).Any(data => data.UserProfile == profile);
+            const string javaKey = @"SOFTWARE\JavaSoft\Java Runtime Environment";
+            using (var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey(javaKey))
+            {
+                if (baseKey == null) return null;
+                var currentVersion = baseKey.GetValue("CurrentVersion").ToString();
+                using (var homeKey = baseKey.OpenSubKey(currentVersion))
+                    if (homeKey != null) return homeKey.GetValue("JavaHome") + @"\bin\javaw.exe";
+            }
+            return null;
         }
 
         private void cmdLogin_Click(object sender, EventArgs e)
@@ -565,7 +681,7 @@ namespace BlockLaunch.UI.Forms
             {
                 if (ApplicationConfig.SavePassword && ApplicationConfig.SelectedProfile.Password != null)
                 {
-                    var login = new FrmLogin(ApplicationLanguage, AvailableProfiles, false,
+                    var login = new FrmLogin(ApplicationLanguage, AvailableProfiles, FrmLogin.LoginMode.EditProfile,
                         ApplicationConfig.SelectedProfile);
                     login.SilentLogin(ApplicationConfig.SelectedProfile.Email,
                         ApplicationConfig.SelectedProfile.Password);
@@ -604,7 +720,7 @@ namespace BlockLaunch.UI.Forms
                         return;
                     }
                 }
-                
+
             }
             else
             {
@@ -618,7 +734,7 @@ namespace BlockLaunch.UI.Forms
             }
 
             var infos = VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id) ? VersionManager.ReadVersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id) : new VersionManager().VersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
-           
+
             if (infos.ParentVersion != null)
             {
                 var error = new Dialog(Dialog.StatusMode.Info, ApplicationLanguage.ConversionRequired,
@@ -663,7 +779,7 @@ namespace BlockLaunch.UI.Forms
             var javaStart = new ProcessStartInfo(javaw)
             {
                 Arguments = arguments,
-                CreateNoWindow = true, // devil number line >:D
+                CreateNoWindow = true,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -675,8 +791,8 @@ namespace BlockLaunch.UI.Forms
                 AppendMinecraftLog(e.Data);
             };
             java.OutputDataReceived += (sender, e) => AppendMinecraftLog(e.Data);
-            java.Start(); 
-            java.BeginOutputReadLine(); 
+            java.Start();
+            java.BeginOutputReadLine();
             java.BeginErrorReadLine();
             ToggleFormVisiblity(false);
             ToggleVisibleOnProgressBar(false);
@@ -690,6 +806,11 @@ namespace BlockLaunch.UI.Forms
                 var text = GetTextFromControl(rtbLogMinecraft);
                 var pos1 = text.IndexOf(startTag, StringComparison.Ordinal) + startTag.Length;
                 var pos2 = text.IndexOf(endTag, StringComparison.Ordinal);
+                if (pos1 == -1 || pos2 == -1)
+                {
+                    EnableLoginButton(true);
+                    return;
+                }
                 var match = text.Substring(pos1, pos2 - pos1);
                 match = startTag + match;
                 match = match.TrimEnd();
@@ -700,8 +821,8 @@ namespace BlockLaunch.UI.Forms
 
         private void GenerateCrashReportTab(string crash)
         {
-            var page = new TabPage(ApplicationLanguage.CrashReport+ DateTime.Now.ToString("HH:mm:ss"));
-            var crashBox = new RichTextBox {Dock = DockStyle.Fill, ReadOnly = true};
+            var page = new TabPage(ApplicationLanguage.CrashReport + DateTime.Now.ToString("HH:mm:ss"));
+            var crashBox = new RichTextBox { Dock = DockStyle.Fill, ReadOnly = true };
             page.Controls.Add(crashBox);
             AddPage(page);
             SetText(crashBox, crash);
@@ -717,22 +838,9 @@ namespace BlockLaunch.UI.Forms
             tbcMain.TabPages.Remove(page);
             page.Dispose();
         }
-        
-        
+        #endregion
 
-        private static string JavaPath()
-        {
-            const string javaKey = @"SOFTWARE\JavaSoft\Java Runtime Environment";
-            using (var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64).OpenSubKey(javaKey))
-            {
-                if (baseKey == null) return null;
-                var currentVersion = baseKey.GetValue("CurrentVersion").ToString();
-                using (var homeKey = baseKey.OpenSubKey(currentVersion))  
-                    if (homeKey != null) return homeKey.GetValue("JavaHome") + @"\bin\javaw.exe";
-            }
-            return null;
-        }
-
+        #region Download
         private void DownloadVersion(Classes.JSON.Version ver)
         {
             var downloadManager = new DownloadManager();
@@ -779,14 +887,16 @@ namespace BlockLaunch.UI.Forms
                     _cancel = true;
                     break;
                 case "asset":
-                    SetDownloadProgressBarText("Downloading asset " + e.DownloadedFile); 
+                    SetDownloadProgressBarText("Downloading asset " + e.DownloadedFile);
                     break;
                 case "finished":
                     SetDownloadProgressBarText("Download finished!");
                     break;
             }
         }
+        #endregion
 
+        #region Launch
         private static void CreateDefaultDirectorys(string id)
         {
             Directory.CreateDirectory("minecraft");
@@ -814,7 +924,7 @@ namespace BlockLaunch.UI.Forms
             if (!Directory.Exists(versionDir))
             {
                 Directory.CreateDirectory(versionDir);
-                return false; 
+                return false;
             }
             if (!File.Exists(versionDir + @"\" + id + ".json") || !File.Exists(versionDir + @"\" + id + ".jar"))
             {
@@ -836,7 +946,9 @@ namespace BlockLaunch.UI.Forms
             }
 
         }
+        #endregion
 
+        #region Click-Events
         private void cmdSettings_Click(object sender, EventArgs e)
         {
             var settings = new FrmSettings(ApplicationConfig, ApplicationLanguage, AvailableLanguages);
@@ -851,6 +963,7 @@ namespace BlockLaunch.UI.Forms
                 var ver = ApplicationConfig.SelectedProfile.SelectedVersion.Type + " " +
                           ApplicationConfig.SelectedProfile.SelectedVersion.Id;
                 ApplyLanguage(ver, ApplicationConfig.SelectedProfile.CachedUsername);
+                ThemeHelper.ApplyTheme(this, ApplicationConfig);
             }
         }
 
@@ -867,6 +980,24 @@ namespace BlockLaunch.UI.Forms
             }
         }
 
+        private void cmdRefreshProfile_Click(object sender, EventArgs e)
+        {
+            SelectProfile(ApplicationConfig.SelectedProfile);
+        }
+
+        private void cmdAddProfil_Click(object sender, EventArgs e)
+        {
+            CreateNewProfile();
+        }
+
+
+        private void cmdCopyProfile_Click(object sender, EventArgs e)
+        {
+            CopyProfile();
+        }
+        #endregion
+
+        #region SelectedIndexChanged-Events
         private void ckbVersions_SelectedIndexChanged(object sender, EventArgs e)
         {
             var version = (Classes.JSON.Version)ckbVersions.SelectedValue;
@@ -889,15 +1020,39 @@ namespace BlockLaunch.UI.Forms
             _downloadedMomentsAgo = false;
         }
 
-        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        private bool _dontChange;
+
+
+        private void ckbProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_initializing) return;
+            var profile = (Profile)ckbProfiles.SelectedValue;
+            if (profile == null) return; // Wait until profile has been readded to BindingSource
+            if (profile == ApplicationConfig.SelectedProfile) return;
+            if (!ApplicationConfig.SavePassword)
+            {
+                if (!_playerCachedForThisSession)
+                {
+                    ChangeProfile(ref profile);
+                }
+            }
+            else
+            {
+                var login = new LoginManager();
+                var ao = new AuthentificateObjects { Email = profile.Email, Password = profile.Password };
+                var result = login.Authentificate(ao);
+                if (!result.Status)
+                {
+                    ChangeProfile(ref profile);
+                }
+            }
+            ApplicationConfig.SelectedProfile = profile;
+            CachePlayerName(ApplicationConfig.SelectedProfile);
+            _dontChange = true;
+            SelectProfile(ApplicationConfig.SelectedProfile);
             Manager.SaveProfiles(AvailableProfiles);
-            Manager.SaveConfig(ApplicationConfig);
-            Manager = null;
-            ApplicationConfig = null;
-            ApplicationLanguage = null;
-            GC.Collect();
         }
+        #endregion
 
         #region Invoke-Methods
         private void SetProgressBarValue(int value, int maximum)
@@ -921,7 +1076,6 @@ namespace BlockLaunch.UI.Forms
             }
             else
             {
-                pgbDownload.CustomText = text;
                 pgbDownload.Refresh();
             }
 
@@ -936,7 +1090,6 @@ namespace BlockLaunch.UI.Forms
             else
             {
                 pgbDownload.Visible = visible;
-                pgbDownload.CustomText = "";
                 pgbDownload.Value = 0;
             }
         }
@@ -1011,56 +1164,14 @@ namespace BlockLaunch.UI.Forms
         }
         #endregion
 
-        private bool _dontChange;
-
-        private void cmdRefreshProfile_Click(object sender, EventArgs e)
-        {
-            SelectProfile(ApplicationConfig.SelectedProfile);
-        }
-
-        private void cmdAddProfil_Click(object sender, EventArgs e)
-        {
-            CreateNewProfile();
-        }
-
-        private void ckbProfiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_initializing) return;
-            var profile = (Profile)ckbProfiles.SelectedValue;
-            if (profile == null) return; // Wait until profile has been readded to BindingSource
-            if (profile == ApplicationConfig.SelectedProfile) return;
-            if (!ApplicationConfig.SavePassword)
-            {
-                if (!_playerCachedForThisSession)
-                {
-                    ChangeProfile(ref profile);
-                }
-            }
-            else
-            {
-                var login = new LoginManager();
-                var ao = new AuthentificateObjects { Email = profile.Email, Password = profile.Password };
-                var result = login.Authentificate(ao);
-                if (!result.Status)
-                {
-                    ChangeProfile(ref profile);
-                }
-            }
-            ApplicationConfig.SelectedProfile = profile;
-            CachePlayerName(ApplicationConfig.SelectedProfile);
-            _dontChange = true;
-            SelectProfile(ApplicationConfig.SelectedProfile);
-            Manager.SaveProfiles(AvailableProfiles);
-        }
-
         #region Tools
 
         private void cmdConvertVersion_Click(object sender, EventArgs e)
         {
             if (!VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id))
             {
-                var errorDialog = new Dialog(Dialog.StatusMode.Error, "Version not installed!",
-                    "Your current version is not installed!", "Please install the version before trying to convert it.",
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, ApplicationLanguage.VersionNotInstalledTitle,
+                     ApplicationLanguage.VersionNotInstalledStatus, ApplicationLanguage.VersionNotInstalledDetails,
                     ApplicationLanguage);
                 errorDialog.ShowDialog();
                 return;
@@ -1068,16 +1179,16 @@ namespace BlockLaunch.UI.Forms
             var json = VersionManager.ReadVersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
             if (json.ParentVersion == null)
             {
-                var errorDialog = new Dialog(Dialog.StatusMode.Error, "Version does not inherit from a version!",
-                    "Version does not inherit from a version!", "Please convert a version that use inheritsFrom",
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, ApplicationLanguage.NoParentTitle,
+                   ApplicationLanguage.NoParentStatus, ApplicationLanguage.NoParentDetails,
                     ApplicationLanguage);
                 errorDialog.ShowDialog();
                 return;
             }
             if (!File.Exists(@"tools\block_converter.exe"))
             {
-                var errorDialog = new Dialog(Dialog.StatusMode.Error, "BlockLaunch-Converter not installed!",
-                    "BlockLaunch-Converter not installed!", "Install the tools under https://github.com/KaskadekingDE/BlockLaunch/releases",
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, ApplicationLanguage.ConverterNotInstalledTitle,
+                    ApplicationLanguage.ConverterNotInstalledStatus, ApplicationLanguage.InstallTools,
                     ApplicationLanguage);
                 errorDialog.ShowDialog();
             }
@@ -1108,20 +1219,6 @@ namespace BlockLaunch.UI.Forms
             AppendConverterLog(e.Data);
         }
 
-        private void txbFile_DragDrop(object sender, DragEventArgs e)
-        {
-            var file = (string)e.Data.GetData(DataFormats.FileDrop);
-            txbFile.Text = file;
-        }
-
-        private void txbFile_DragEnter(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Link;
-            }
-        }
-
         private void cmdBrowse_Click(object sender, EventArgs e)
         {
             if (ofdOptifine.ShowDialog() == DialogResult.OK)
@@ -1134,8 +1231,8 @@ namespace BlockLaunch.UI.Forms
         {
             if (!File.Exists(@"tools\block_optifine_installer.exe"))
             {
-                var errorDialog = new Dialog(Dialog.StatusMode.Error, "BlockLaunch-Optfine Installer not installed!",
-                    "BlockLaunch-Optfine Installer not installed!", "Install the tools under https://github.com/KaskadekingDE/BlockLaunch/releases",
+                var errorDialog = new Dialog(Dialog.StatusMode.Error, ApplicationLanguage.InstallerNotInstalledTitle,
+                    ApplicationLanguage.InstallerNotInstalledStatus, ApplicationLanguage.InstallTools,
                     ApplicationLanguage);
                 errorDialog.ShowDialog();
             }
@@ -1159,6 +1256,32 @@ namespace BlockLaunch.UI.Forms
             }
         }
         #endregion
+
+        #region Drag & Drop
+        private void txbFile_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        private void txbFile_DragDrop(object sender, DragEventArgs e)
+        {
+            var fileList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+            foreach (var item in fileList.Where(item => item.EndsWith(".jar") || item.EndsWith(@".jar""")))
+            {
+                txbFile.Text = item;
+                break;
+            }
+            if (String.IsNullOrEmpty(txbFile.Text))
+            {
+                System.Media.SystemSounds.Asterisk.Play();
+            }
+        }
+        #endregion
+
+        private void pic_Click(object sender, EventArgs e)
+        {
+            LoadServerStatus();
+        }
     }
     #region DataBinding-Classes
 

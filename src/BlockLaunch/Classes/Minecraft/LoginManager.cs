@@ -34,7 +34,7 @@ namespace BlockLaunch.Classes.Minecraft
             };
             var json = JsonConvert.SerializeObject(content);
             var data = Encoding.UTF8.GetBytes(json);
-            var webrequest = WebRequest.CreateHttp(AuthentificationServer + "/authenticate");
+            var webrequest = WebRequest.Create(AuthentificationServer + "/authenticate");
             webrequest.ContentType = "application/json";
             webrequest.Method = "POST";
             webrequest.Proxy = null;

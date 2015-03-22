@@ -19,7 +19,7 @@ namespace BuildHelper
             Directory.SetCurrentDirectory(mainDir);
             MoveWebkit(args);
             MoveTools(args);
-
+            MoveDlls(args);
         }
 
         public static void MoveTools(string[] args)
@@ -44,6 +44,31 @@ namespace BuildHelper
             if (File.Exists(@"bin\" + args[1] + @"\WebKitBrowser.dll"))
             {
                 File.Delete(@"bin\" + args[1] + @"\WebKitBrowser.dll");
+            }
+        }
+
+        public static void MoveDlls(string[] args)
+        {
+            var work = args[0] + @"\bin\" + args[1];
+            var dlls = Directory.GetFiles(work, "*.dll", SearchOption.TopDirectoryOnly);
+            foreach (var dll in dlls)
+            {
+                var fi = new FileInfo(dll);
+                var dest = work + @"\libs\" + fi.Name;
+                if (File.Exists(dest))
+                {
+                    try
+                    {
+                        File.Delete(dest);
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        Console.WriteLine("Failed to move " + dest + ". Skipping file...");
+                        continue;
+                    }
+                    
+                }
+                File.Move(dll, dest);
             }
         }
 
