@@ -10,13 +10,13 @@ It also includes most of the features from the original Launcher.
 **It's still in Beta so some features are maybe not available or not finished!**
 
 ### Version
-The current version is 0.3 Beta
+The current version is 0.3.1 Beta
 
 ### Known Issues
 
-My software have bugs like all applications. So here is a list of all (confirmed) bugs:
+My software has bugs like all applications. So here is a list of all (confirmed) bugs:
 
-- Sometimes the config will be corrupted when closing application.
+- None :) If you found a bug please report it under Issues
 
 ### Todo's
 
