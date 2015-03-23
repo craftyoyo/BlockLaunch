@@ -62,8 +62,12 @@ namespace BlockLaunch.Classes.Launcher
 
         public void SaveConfig(Config config)
         {
+            if (!File.Exists("config.json"))
+            {
+                using (File.Create("config.json")) { }
+            }
             var json = JsonConvert.SerializeObject(config, Formatting.Indented);
-            using (var fs = new FileStream("config.json", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+            using (var fs = new FileStream("config.json", FileMode.Truncate, FileAccess.Write, FileShare.None))
             {
                 using (var sw = new StreamWriter(fs, Encoding.ASCII))
                 {
@@ -74,8 +78,12 @@ namespace BlockLaunch.Classes.Launcher
 
         public void SaveProfiles(List<Profile> profiles)
         {
+            if (!File.Exists("profiles.json"))
+            {
+                using (File.Create("profiles.json")) { }
+            }
             var json = JsonConvert.SerializeObject(profiles, Formatting.Indented);
-            using (var fs = new FileStream("profiles.json", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+            using (var fs = new FileStream("profiles.json", FileMode.Truncate, FileAccess.Write, FileShare.None))
             {
                 using (var sw = new StreamWriter(fs, Encoding.ASCII))
                 {
