@@ -728,11 +728,6 @@ namespace BlockLaunch.UI.Forms
                 if (OnProfileChanged != null) OnProfileChanged();
             }
 
-            if (!File.Exists(@"minecraft\launcher_profiles.json"))
-            {
-                File.Create(@"minecraft\launcher_profiles.json");
-            }
-
             var infos = VersionInstalled(ApplicationConfig.SelectedProfile.SelectedVersion.Id) ? VersionManager.ReadVersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id) : new VersionManager().VersionInfos(ApplicationConfig.SelectedProfile.SelectedVersion.Id);
 
             if (infos.ParentVersion != null)
@@ -763,6 +758,10 @@ namespace BlockLaunch.UI.Forms
                     return;
                 }
                 _downloadedMomentsAgo = true;
+            }
+            if (!File.Exists(@"minecraft\launcher_profiles.json"))
+            {
+                File.Create(@"minecraft\launcher_profiles.json");
             }
             var home = AppDomain.CurrentDomain.BaseDirectory + "minecraft";
             var versionsDir = home + @"\versions";
