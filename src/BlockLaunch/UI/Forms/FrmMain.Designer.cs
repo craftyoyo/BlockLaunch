@@ -108,7 +108,7 @@ namespace BlockLaunch.UI.Forms
             this.wkbMinecraftUpdates.AllowDownloads = false;
             this.wkbMinecraftUpdates.AllowNavigation = false;
             this.wkbMinecraftUpdates.AllowNewWindows = false;
-            this.wkbMinecraftUpdates.BackColor = System.Drawing.Color.White;
+            this.wkbMinecraftUpdates.BackColor = System.Drawing.Color.Transparent;
             this.wkbMinecraftUpdates.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wkbMinecraftUpdates.Location = new System.Drawing.Point(3, 3);
             this.wkbMinecraftUpdates.Name = "wkbMinecraftUpdates";
@@ -129,7 +129,7 @@ namespace BlockLaunch.UI.Forms
             this.tbcMain.Controls.Add(this.tabTools);
             this.tbcMain.Location = new System.Drawing.Point(23, 63);
             this.tbcMain.Name = "tbcMain";
-            this.tbcMain.SelectedIndex = 0;
+            this.tbcMain.SelectedIndex = 1;
             this.tbcMain.Size = new System.Drawing.Size(1046, 723);
             this.tbcMain.TabIndex = 16;
             this.tbcMain.UseSelectable = true;
@@ -222,9 +222,10 @@ namespace BlockLaunch.UI.Forms
             // 
             // pgbDownload
             // 
+            this.pgbDownload.HideProgressText = false;
             this.pgbDownload.Location = new System.Drawing.Point(3, 585);
             this.pgbDownload.Name = "pgbDownload";
-            this.pgbDownload.ProgressPercentText = null;
+            this.pgbDownload.ProgressText = "";
             this.pgbDownload.Size = new System.Drawing.Size(1035, 27);
             this.pgbDownload.TabIndex = 18;
             this.pgbDownload.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

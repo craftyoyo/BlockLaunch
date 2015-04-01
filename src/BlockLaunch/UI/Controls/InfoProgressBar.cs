@@ -9,7 +9,8 @@ namespace BlockLaunch.UI.Controls
 {
     public class InfoProgressBar : MetroProgressBar
     {
-        public new string ProgressPercentText { get; set; }
+        public string ProgressText { get; set; }
+        public Color ForeColorProgress { get; set; }
 
         private double ProgressBarWidth
         {
@@ -47,8 +48,7 @@ namespace BlockLaunch.UI.Controls
         private void DrawProgressText(IDeviceContext graphics)
         {
             if (HideProgressText) return;
-            var foreColor = !Enabled ? MetroPaint.ForeColor.ProgressBar.Disabled(Theme) : MetroPaint.ForeColor.ProgressBar.Normal(Theme);
-            TextRenderer.DrawText(graphics, ProgressPercentText, MetroFonts.ProgressBar(FontSize, FontWeight), ClientRectangle, foreColor, MetroPaint.GetTextFormatFlags(TextAlign));
+            TextRenderer.DrawText(graphics, ProgressText, MetroFonts.ProgressBar(FontSize, FontWeight), ClientRectangle, ForeColorProgress, MetroPaint.GetTextFormatFlags(TextAlign));
         }
     }
 }

@@ -80,12 +80,9 @@ namespace BlockLaunch.UI.Forms
 
         private void FrmLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (Equals((sender as Button), cmdLogin))
-            {
                 if (!_cancelOk) return;
                 _cancelOk = false;
                 e.Cancel = true;
-            }
         }
         #endregion
 
@@ -120,6 +117,15 @@ namespace BlockLaunch.UI.Forms
                 if (_mode == LoginMode.CreateProfile || _mode == LoginMode.CopyProfile)
                 {
                     string tmp;
+                    if (result.AuthResponse.SelectedProfile == null && result.AuthResponse.AvailableProfiles == null)
+                    {
+                        var errorDialog = new Dialog(Dialog.StatusMode.Error, "Invalid mojang account",
+                            "It seems you didn't bought minecraft!", "Please buy minecraft under http://minecraft.net",
+                            _language);
+                        errorDialog.ShowDialog();
+                        _cancelOk = false;
+                        return;
+                    }
                     var jsonUuid =
                         JsonConvert.DeserializeObject<UsernameToUuid>(
                             LoginManager.GetRequest("https://api.mojang.com/users/profiles/minecraft/" +
@@ -142,6 +148,7 @@ namespace BlockLaunch.UI.Forms
                         CachedUsername = result.AuthResponse.SelectedProfile.Name
                     };
                     UserProfile = profile;
+                    _cancelOk = true;
                 }
                 else if (_mode == LoginMode.EditProfile)
                 {
@@ -154,6 +161,7 @@ namespace BlockLaunch.UI.Forms
                         pass = txbPassword.Text;
                     }
                     UserProfile.Password = pass;
+                    _cancelOk = true;
                 }
 
             }

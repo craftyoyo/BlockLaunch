@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using BlockLaunch.Classes.JSON;
+using BlockLaunch.UI.Controls;
 using MetroFramework;
 using MetroFramework.Controls;
 using MetroFramework.Forms;
@@ -66,6 +67,11 @@ namespace BlockLaunch.Classes
                 else if (control.GetType() == typeof(MetroTabPage))
                 {
                     ApplyTheme((Control)control, config);
+                }
+                else if (control.GetType() == typeof (InfoProgressBar))
+                {
+                    var pgb = (InfoProgressBar) control;
+                    pgb.ForeColorProgress = col;
                 }
             }
             foreach (var rtb in parent.Controls.OfType<RichTextBox>())
