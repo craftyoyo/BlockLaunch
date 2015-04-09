@@ -54,7 +54,7 @@ namespace BlockLaunch.UI.Forms
 
         private bool _playerCachedForThisSession;
 
-        private readonly UpdateManager _updater = new UpdateManager(new Uri("http://kaskade-dev.cwsurf.de/projects/blocklaunch/updates.json"), "<RSAKeyValue><Modulus>wUv6rCdDcaZA4reehYFfZblqa5AVxs8ODyRTNgq2v/aGtiUqY8VSd1rBjRlPjUQY87sDq9T0KZWaOJMQRIxsva5IGrfhf917wA300Db7WudKvVfGQsBb0ng834C0WpNxRDhMtfa4HeDA9YuGUJITPotxgJ6rvrZrkqjUH4RXVkf+4Yy/6dBtOlozxO12xd8fGbNCHa4vsfyI1uKikiFyO0r4h8uzY+x3Fs9O30vuTUOewJrEWlBBodm/BvmiuYbOprsINckGhcLeX4Nq40hoSB0caPXFr1tBcGSS/sQ4z8yOkacWMixHImToecABy+tGVXP4S2xu2yf4IRx0dJLg2y6/vpEl6/2829IvrsVIAJI8Y5X/uFrZweitwKhBRN1OaNa3dTAluEVqBHwAkr0A7fmZsv4Q48KpmHlClnqwW3qscPT59j7WUHUV+Cs2qL1rBHmBhWkHL9oSUA04ztCA6a6pz2D/5Hcs5MYXrS+Im6LdK0C2QG9OrJXZ3W7yTmA3ObDSWuOgT8s+DDof1yMePySAQmHDgklx76mDQ2GFJpjC2o5YH5XpoTMrH5yjvbh6GF2ojSkM5z504I9T0CyfLBRyz7Rydh9FtS5jEwWcp014X5c16LkFF+g4AtxMaFGk3NXIomqlLaUH9d7ON21j5T9nEAqpZLWz0WEauFzIDzPtOLDOvScsqlJl4ekWg4skF2ccVeaVPf03AIx+mmCU1Z4oHdqVTHB9V6vVeAbghwze+Fm9Fh/t2ApxBZIw08cKyXp+LQF0U7856b5aOkQbeM32o2PvCFqf7oa18bHTBLcMziv0OVmQK2gGAsK/LMZRmdfsHVmIatVzEv/q3nZ5uhOGhxYUYImqmZqWUP07IJMEWNc/J4/PLLQZtNG9SABNZnDKFm5Ii5eDpGBW5rA6IDmqZjK1qArFQFFhgc7sPxTucErTT6WlmS1zgZV0imqy44kuZxEQEgffD2HU0F78xI3rBwY5+rcwNYiIqysXRxCuyfD4rP24ruOBCJboY6pV5xJRUhQ1cxgGJ/NYB3F7n8f/RcWgVgFvh5BgZijOoGIrMu1YmZ39PUBmh2qdtmloySQzXfh5j81JTvBQLosJxq0DrFVoBNyiymcUyZkK76sUKd1c97NRF4R/opnNWD6PmgP2VP+h9GGmJQMEfRBkMT818JdLgBHY5xVcrn/+xZVxrxi4+gF7Ahu+EzXt8DPVAKqaHjeoV1oRCczMQCuJNS0Eyivnz68p/UfhD7cWyV7TrCYcN4ONv0jIA2qNIBiomtQxXIiP7XB+9EHQxvxvlQ0DgBySwK3nds1wLCjnQTBoTKyEizKi75J8iKwA8gXqWQpSQ/H3rGJ9cmrRFmhgHw==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>", new UpdateVersion("0.3.2.0b1"), CultureInfo.CurrentCulture);
+        private readonly UpdateManager _manager = new UpdateManager(new Uri("http://kaskadekingde.cloudza.org/software/blocklaunch/updates/updates.json"), "<RSAKeyValue><Modulus>sDdtEyE3syjgMAjjAgZZ3ouWr55cfVm2p8R+q0g/y88YENxOTZryV8m1IfkLzMw7/anx5Xp+PePZQtdbHrbUCcwidyLZKrXEsrmqNky5T8/hKsatPenwhMVNwxvMZtCnBKtFQgNgDXg0pGdBPcFhjjlHam2gNWRkDz+/8PevJv5cM4EtbIv6v91EYkOQ0ZJJsst7hOAnc6vQnqM3ILJVE+woTdrzmtrNoh7E4wh8lBLerK9HFsqDccgYTlsdS1C4e4XXyFFt9NkWl0X9LewxWphgQ585NHE1xhWm9hDPnCF+vvIE1GWf/hP+hCZ3JZ2SLSnfMSf546Oq9mUZ3nu+k/Sca7yra56X7do+E7xmcUSM0yheIqK4ZGEbI2BGUnLYQRTR29aDorust8vSq5fc+sLwd7tie8Fpvup0Atex+lcZ8ptuVlsW9vGX3zwTZOOGgD/Y8n8g3ta+XITXHijgxLMQ+6uUSm9m4KNzuBYocDPLarn8kn8BTK83ZAHWjv4D1PP4MnOO1mRkJzhATnrDBXpNriwP8HbUcNXuKsvodceY0ooXRu2W8LCqzW7AbX7gzck3w6/DPAeM5bJzJhr1eCtcFXtUuOe/pohBtwi0bzRrkKYcrEtR+OkXDguKUZ4mPaAic6EYiyuVxu65zu7+tzGMsWl29usORoSwTS+yiq1EojUiUVbb3zx5cZ8CcJkHERoN83ZNDsknO+ldoTazqd0x+gy6JJp/24C18yg55yxdy+uxF2XRxRMFCWGSDwUjpzlU05mc2cqSPfFcY4bP9cA//QxkY/oPw0x1I5HW8GpTm47xuKRSu8TefqBQD2bDP9B3iIHb01H9yGhLnRc1WJoBmo78ZJdovkuRvnMG+X9XPW3BfiLjH+hRwEDoS4Q6gdAdzgvolm2n0Dq4dZ1kUZ9Lm1fVMuzIyBO/pbw9A6gnt9L+1jOejmqO1G9RITJfdZYoJPUQOJh/r3XymBKG9nw2LMk1fWtk4LJo+ATLUQLZtT6IC+ZCwsjopiQ4uyJjR0zXGSJuEeH0Cq7DeINrJXiuBKtOJFxKfK5GEc6uLI4BrHkyV7MHBbcFk5/cCdVyziyQBNN8tUe9PEEcl7K46Dt1OsIY+Ks1r9SGFBZ5tgKvDeYnU3PYkwbk7LRxzHgaS39na5DUQmZZBP4xipQgTIISFrctIs8q//g0PvworHG2sYX6cnxrxAoNru053FesbrZIBhPyEfi1UJpQKrEZT+Wr72DdLadzetH7Gy0wxy8uLGjSdtlMw6sfFtfmGePh9h59VFW6pKxPZQ/EEW/znt41kCmDbbMazETl4pAMWSVpIuexIEpm8HC50Z7gRA7WYxesjIZLQz4PCxUskOFYOQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>", new CultureInfo("en"));
 
         public static Config ApplicationConfig
         {
@@ -176,7 +176,7 @@ namespace BlockLaunch.UI.Forms
             AppendBlocklaunchLog(message);
             var name = LoginManager.GetPlayerName(ApplicationConfig.SelectedProfile.Uuid);
             LoadImage(name ?? ApplicationConfig.SelectedProfile.CachedUsername);
-            SearchForUpdates();
+            SearchForUpdates(false);
             _initializing = false;
         }
         #endregion
@@ -501,17 +501,16 @@ namespace BlockLaunch.UI.Forms
             ApplicationConfig = Manager.LoadConfig();
         }
 
-        private void SearchForUpdates()
+        private void SearchForUpdates(bool showDialog)
         {
             var message = Manager.LogMessage("Searching for updates...", BlockLaunchManager.LogMode.Information, true,
                 ApplicationLanguage);
 
             AppendBlocklaunchLog(message);
-            _updater.IncludeAlpha = false;
-            _updater.IncludeBeta = true;
-            _updater.IncludeCurrentPcIntoStatistics = false;
-            _updater.UseHiddenSearch = true;
-            var updaterui = new UpdaterUi(_updater);
+            _manager.IncludeAlpha = false;
+            _manager.IncludeBeta = true;
+            _manager.IncludeCurrentPcIntoStatistics = false;
+            var updaterui = new UpdaterUi(_manager, new WindowsFormsSynchronizationContext(), !showDialog);
             updaterui.ShowUserInterface();
         }
 
@@ -669,7 +668,6 @@ namespace BlockLaunch.UI.Forms
         private void LoginAndPlay()
         {
             Invoke(new Action(rtbLogMinecraft.Clear));
-            ToggleVisibleOnProgressBar(true);
             SetDownloadProgressBarText("Preparing...");
             var javaw = JavaPath();
             var loginManager = new LoginManager();
@@ -796,7 +794,8 @@ namespace BlockLaunch.UI.Forms
             java.BeginOutputReadLine();
             java.BeginErrorReadLine();
             ToggleFormVisiblity(false);
-            ToggleVisibleOnProgressBar(false);
+            SetDownloadProgressBarText("");
+            SetProgressBarValue(0, 100);
             java.WaitForExit();
             ToggleFormVisiblity(true);
             Directory.Delete(nativeFolder, true);
@@ -856,8 +855,6 @@ namespace BlockLaunch.UI.Forms
             downloadManager.OnDownloadStarted += downloadManager_OnDownloadStarted;
             downloadManager.OnDownloadFinished += downloadManager_OnDownloadFinished;
             downloadManager.DownloadLibraries(ver);
-            SetDownloadProgressBarText("null");
-            ToggleVisibleOnProgressBar(false);
         }
 
         private void downloadManager_OnDownloadFinished(object sender, DownloadManager.DownloadFinishedArgs e)
@@ -1077,22 +1074,11 @@ namespace BlockLaunch.UI.Forms
             }
             else
             {
+                pgbDownload.HideProgressText = false;
+                pgbDownload.ProgressText = text;
                 pgbDownload.Refresh();
             }
 
-        }
-
-        private void ToggleVisibleOnProgressBar(bool visible)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action<bool>(ToggleVisibleOnProgressBar), visible);
-            }
-            else
-            {
-                pgbDownload.Visible = visible;
-                pgbDownload.Value = 0;
-            }
         }
 
         private void AddPage(TabPage tp)
@@ -1274,6 +1260,14 @@ namespace BlockLaunch.UI.Forms
         private void pic_Click(object sender, EventArgs e)
         {
             LoadServerStatus();
+        }
+
+        private void FrmMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F12)
+            {
+                SearchForUpdates(true);
+            }
         }
     }
     #region DataBinding-Classes

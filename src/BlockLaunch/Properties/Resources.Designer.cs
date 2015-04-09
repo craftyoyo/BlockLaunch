@@ -113,6 +113,16 @@ namespace BlockLaunch.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MainIcon {
+            get {
+                object obj = ResourceManager.GetObject("MainIcon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap redstone_off {
             get {
                 object obj = ResourceManager.GetObject("redstone_off", resourceCulture);

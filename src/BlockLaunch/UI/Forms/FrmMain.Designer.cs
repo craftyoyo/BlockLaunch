@@ -129,7 +129,7 @@ namespace BlockLaunch.UI.Forms
             this.tbcMain.Controls.Add(this.tabTools);
             this.tbcMain.Location = new System.Drawing.Point(23, 63);
             this.tbcMain.Name = "tbcMain";
-            this.tbcMain.SelectedIndex = 1;
+            this.tbcMain.SelectedIndex = 0;
             this.tbcMain.Size = new System.Drawing.Size(1046, 723);
             this.tbcMain.TabIndex = 16;
             this.tbcMain.UseSelectable = true;
@@ -222,6 +222,7 @@ namespace BlockLaunch.UI.Forms
             // 
             // pgbDownload
             // 
+            this.pgbDownload.ForeColorProgress = System.Drawing.Color.Empty;
             this.pgbDownload.HideProgressText = false;
             this.pgbDownload.Location = new System.Drawing.Point(3, 585);
             this.pgbDownload.Name = "pgbDownload";
@@ -583,6 +584,7 @@ namespace BlockLaunch.UI.Forms
             this.Text = "BlockLaunch - v0.3 Beta - Main Menu";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.Load += new System.EventHandler(this.FrmMain_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyDown);
             this.tbpUpdates.ResumeLayout(false);
             this.tbcMain.ResumeLayout(false);
             this.tbpMain.ResumeLayout(false);

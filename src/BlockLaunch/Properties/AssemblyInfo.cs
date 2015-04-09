@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © KaskadekingDE 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: nUpdate.Core.nUpdateVersion("0.3.3.0b1")]
 
 // Durch Festlegen von ComVisible auf "false" werden die Typen in dieser Assembly unsichtbar 
 // für COM-Komponenten.  Wenn Sie auf einen Typ in dieser Assembly von 
@@ -32,5 +33,5 @@ using System.Runtime.InteropServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern 
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.3.2.0")]
-[assembly: AssemblyFileVersion("0.3.2.0")]
+[assembly: AssemblyVersion("0.3.3.0")]
+[assembly: AssemblyFileVersion("0.3.3.0")]

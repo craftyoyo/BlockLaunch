@@ -50,6 +50,8 @@
             this.ckbTheme = new MetroFramework.Controls.MetroComboBox();
             this.lblStyle = new MetroFramework.Controls.MetroLabel();
             this.ckbStyle = new MetroFramework.Controls.MetroComboBox();
+            this.txbMinecraftArgs = new MetroFramework.Controls.MetroTextBox();
+            this.lblMinecraftArgs = new MetroFramework.Controls.MetroLabel();
             ((System.ComponentModel.ISupportInitialize)(this.nudMemory)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -86,7 +88,7 @@
             // 
             // nudMemory
             // 
-            this.nudMemory.Location = new System.Drawing.Point(140, 94);
+            this.nudMemory.Location = new System.Drawing.Point(140, 123);
             this.nudMemory.Maximum = new decimal(new int[] {
             16,
             0,
@@ -157,7 +159,7 @@
             this.chkDontSavePassword.AutoSize = true;
             this.chkDontSavePassword.Checked = true;
             this.chkDontSavePassword.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDontSavePassword.Location = new System.Drawing.Point(25, 190);
+            this.chkDontSavePassword.Location = new System.Drawing.Point(25, 217);
             this.chkDontSavePassword.Name = "chkDontSavePassword";
             this.chkDontSavePassword.Size = new System.Drawing.Size(276, 15);
             this.chkDontSavePassword.TabIndex = 20;
@@ -169,7 +171,7 @@
             // cmdSaveSettings
             // 
             this.cmdSaveSettings.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.cmdSaveSettings.Location = new System.Drawing.Point(25, 211);
+            this.cmdSaveSettings.Location = new System.Drawing.Point(23, 238);
             this.cmdSaveSettings.Name = "cmdSaveSettings";
             this.cmdSaveSettings.Size = new System.Drawing.Size(423, 23);
             this.cmdSaveSettings.TabIndex = 15;
@@ -221,7 +223,7 @@
             // lblMemory
             // 
             this.lblMemory.AutoSize = true;
-            this.lblMemory.Location = new System.Drawing.Point(25, 94);
+            this.lblMemory.Location = new System.Drawing.Point(25, 124);
             this.lblMemory.Name = "lblMemory";
             this.lblMemory.Size = new System.Drawing.Size(109, 19);
             this.lblMemory.TabIndex = 21;
@@ -231,7 +233,7 @@
             // lblTheme
             // 
             this.lblTheme.AutoSize = true;
-            this.lblTheme.Location = new System.Drawing.Point(25, 120);
+            this.lblTheme.Location = new System.Drawing.Point(25, 157);
             this.lblTheme.Name = "lblTheme";
             this.lblTheme.Size = new System.Drawing.Size(56, 19);
             this.lblTheme.TabIndex = 22;
@@ -245,7 +247,7 @@
             this.ckbTheme.Items.AddRange(new object[] {
             "Light",
             "Dark"});
-            this.ckbTheme.Location = new System.Drawing.Point(140, 120);
+            this.ckbTheme.Location = new System.Drawing.Point(140, 147);
             this.ckbTheme.Name = "ckbTheme";
             this.ckbTheme.Size = new System.Drawing.Size(308, 29);
             this.ckbTheme.TabIndex = 23;
@@ -254,7 +256,7 @@
             // lblStyle
             // 
             this.lblStyle.AutoSize = true;
-            this.lblStyle.Location = new System.Drawing.Point(25, 155);
+            this.lblStyle.Location = new System.Drawing.Point(25, 192);
             this.lblStyle.Name = "lblStyle";
             this.lblStyle.Size = new System.Drawing.Size(43, 19);
             this.lblStyle.TabIndex = 24;
@@ -268,17 +270,41 @@
             this.ckbStyle.Items.AddRange(new object[] {
             "Light",
             "Dark"});
-            this.ckbStyle.Location = new System.Drawing.Point(140, 155);
+            this.ckbStyle.Location = new System.Drawing.Point(140, 182);
             this.ckbStyle.Name = "ckbStyle";
             this.ckbStyle.Size = new System.Drawing.Size(308, 29);
             this.ckbStyle.TabIndex = 25;
             this.ckbStyle.UseSelectable = true;
             // 
+            // txbMinecraftArgs
+            // 
+            this.txbMinecraftArgs.Lines = new string[0];
+            this.txbMinecraftArgs.Location = new System.Drawing.Point(170, 94);
+            this.txbMinecraftArgs.MaxLength = 32767;
+            this.txbMinecraftArgs.Name = "txbMinecraftArgs";
+            this.txbMinecraftArgs.PasswordChar = '\0';
+            this.txbMinecraftArgs.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txbMinecraftArgs.SelectedText = "";
+            this.txbMinecraftArgs.Size = new System.Drawing.Size(278, 23);
+            this.txbMinecraftArgs.TabIndex = 26;
+            this.txbMinecraftArgs.UseSelectable = true;
+            // 
+            // lblMinecraftArgs
+            // 
+            this.lblMinecraftArgs.AutoSize = true;
+            this.lblMinecraftArgs.Location = new System.Drawing.Point(23, 98);
+            this.lblMinecraftArgs.Name = "lblMinecraftArgs";
+            this.lblMinecraftArgs.Size = new System.Drawing.Size(141, 19);
+            this.lblMinecraftArgs.TabIndex = 27;
+            this.lblMinecraftArgs.Text = "Minecraft-Arguments: ";
+            // 
             // FrmSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(471, 247);
+            this.ClientSize = new System.Drawing.Size(471, 272);
+            this.Controls.Add(this.lblMinecraftArgs);
+            this.Controls.Add(this.txbMinecraftArgs);
             this.Controls.Add(this.ckbStyle);
             this.Controls.Add(this.lblStyle);
             this.Controls.Add(this.ckbTheme);
@@ -328,5 +354,7 @@
         private MetroFramework.Controls.MetroComboBox ckbTheme;
         private MetroFramework.Controls.MetroLabel lblStyle;
         private MetroFramework.Controls.MetroComboBox ckbStyle;
+        private MetroFramework.Controls.MetroTextBox txbMinecraftArgs;
+        private MetroFramework.Controls.MetroLabel lblMinecraftArgs;
     }
 }
