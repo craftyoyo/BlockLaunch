@@ -22,6 +22,8 @@ namespace BlockLaunch.Classes.JSON
         public bool SavePassword { get; set; }
         [JsonProperty("jvm_arguments")]
         public string JvmArguments { get; set; }
+        [JsonProperty("minecraft_arguments")]
+        public string MinecraftArguments { get; set; }
         [JsonProperty("memory")]
         public int Memory { get; set; }
         [JsonProperty("selectedProfile")]

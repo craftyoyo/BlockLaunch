@@ -27,7 +27,7 @@ namespace BlockLaunch.Classes.Minecraft
             return result;
         }
 
-        public string MinecraftArguments(VersionInformation ver, Profile selectedProfile)
+        public string MinecraftArguments(VersionInformation ver, Profile selectedProfile, Config config)
         {
             var folder = AppDomain.CurrentDomain.BaseDirectory + "minecraft";
             var arguments =
@@ -40,6 +40,7 @@ namespace BlockLaunch.Classes.Minecraft
                     .Replace("${auth_access_token}", selectedProfile.AccessToken)
                     .Replace("${user_properties}", Properties(selectedProfile))
                     .Replace("${user_type}", "mojang");
+            arguments = arguments + " " + config.MinecraftArguments;
             return arguments;
         }
 

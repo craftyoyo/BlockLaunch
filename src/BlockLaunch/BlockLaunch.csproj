@@ -75,7 +75,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ExceptionBase">
-      <HintPath>..\..\..\..\..\Downloads\ExceptionBase.NET-master\VB.NET\ExceptionBase.NET\ExceptionBase.NET\bin\Release\ExceptionBase.dll</HintPath>
+      <HintPath>Libs\ExceptionBase.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

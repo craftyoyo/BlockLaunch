@@ -111,7 +111,8 @@ namespace BlockLaunch.UI.Forms
                 JvmArguments = txbJvmArguments.Text,
                 Memory = (int)nudMemory.Value,
                 Style = ckbStyle.Text,
-                Theme = ckbTheme.Text
+                Theme = ckbTheme.Text,
+                MinecraftArguments = txbMinecraftArgs.Text
             };
             NewConfig = config;
         }

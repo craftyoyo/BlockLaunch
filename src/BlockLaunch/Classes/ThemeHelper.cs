@@ -60,6 +60,12 @@ namespace BlockLaunch.Classes
                     lbl.BackColor = Color.Transparent;
 
                 }
+                else if (control.GetType() == typeof (Label))
+                {
+                    var lbl = (Label)control;
+                    lbl.ForeColor = col;
+                    lbl.BackColor = Color.Transparent;
+                }
                 else if (control.GetType() == typeof(MetroTabControl))
                 {
                     ApplyTheme((Control)control, config);

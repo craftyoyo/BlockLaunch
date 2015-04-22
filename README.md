@@ -10,7 +10,7 @@ It also includes most of the features from the original Launcher.
 **It's still in Beta so some features are maybe not available or not finished!**
 
 ### Version
-The current version is 0.3.1 Beta
+The current version is 0.3.5 Beta
 
 ### Known Issues
 
@@ -35,7 +35,7 @@ You need following to run BlockLaunch & Minecraft:
 - .NET Framework 4.0
 - Windows XP or higher
 - 256MB RAM or more
-- Around 20MB free space (for BlockLaunch)
+- Around 20MB free space
 
 **Minecraft:**
 
@@ -60,7 +60,8 @@ Thanks to:
 - jamesnk for JSON.NET licensed under MIT
 - ICSharpCode for SharpZipLib licensed under GPL
 - MakarovDev for the ExpandCollapsePanel Control
-- peterdn for WebKit .NET
+- peterdn for WebKit.NET
+- leolabs for ExceptionBase.NET
 
 License
 ----

@@ -510,7 +510,7 @@ namespace BlockLaunch.UI.Forms
             _manager.IncludeAlpha = false;
             _manager.IncludeBeta = true;
             _manager.IncludeCurrentPcIntoStatistics = false;
-            var updaterui = new UpdaterUi(_manager, new WindowsFormsSynchronizationContext(), !showDialog);
+            var updaterui = new UpdaterUI(_manager, SynchronizationContext.Current, !showDialog);
             updaterui.ShowUserInterface();
         }
 
@@ -772,7 +772,7 @@ namespace BlockLaunch.UI.Forms
             var launchManager = new LaunchManager();
             var jvmArgs = launchManager.JvmArguments(nativeFolder);
             var dependencies = launchManager.Dependencies(json);
-            var options = launchManager.MinecraftArguments(json, ApplicationConfig.SelectedProfile);
+            var options = launchManager.MinecraftArguments(json, ApplicationConfig.SelectedProfile, ApplicationConfig);
             var arguments = jvmArgs + " " + dependencies + " " + options;
             var java = new Process();
             var javaStart = new ProcessStartInfo(javaw)
