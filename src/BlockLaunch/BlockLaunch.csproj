@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Base64Manager.cs" />
+    <Compile Include="Classes\JSON\Api\ProfileTextures.cs" />
     <Compile Include="Classes\JSON\Api\UsernameToUuid.cs" />
     <Compile Include="Classes\JSON\Api\UuidToProfile.cs" />
     <Compile Include="Classes\JSON\Assets.cs" />

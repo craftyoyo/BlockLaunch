@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BlockLaunch.Classes.JSON.Api;
 using BlockLaunch.Classes.JSON.Login.Authentificate;
 using Newtonsoft.Json;
 
@@ -28,5 +29,9 @@ namespace BlockLaunch.Classes.JSON
         public List<Propertie> Properties { get; set; }
         [JsonProperty("selectedVersion")]
         public Version SelectedVersion { get; set; }
+        [JsonProperty("cachedProfile")]
+        public string CachedProfileString { get; set; }
+        [JsonIgnore]
+        public UuidToProfile CachedProfile { get; set; }
     }
 }

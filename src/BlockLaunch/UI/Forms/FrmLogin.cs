@@ -80,9 +80,10 @@ namespace BlockLaunch.UI.Forms
 
         private void FrmLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
-                if (!_cancelOk) return;
-                _cancelOk = false;
+            if (!_cancelOk)
+            {
                 e.Cancel = true;
+            }
         }
         #endregion
 

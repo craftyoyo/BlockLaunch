@@ -49,7 +49,7 @@
             this.ecpDetails.IsExpanded = false;
             this.ecpDetails.Location = new System.Drawing.Point(23, 170);
             this.ecpDetails.Name = "ecpDetails";
-            this.ecpDetails.Size = new System.Drawing.Size(473, 36);
+            this.ecpDetails.Size = new System.Drawing.Size(473, 35);
             this.ecpDetails.TabIndex = 3;
             this.ecpDetails.Text = "Details";
             this.ecpDetails.UseAnimation = false;
@@ -114,6 +114,7 @@
             this.cmdOk.TabIndex = 9;
             this.cmdOk.Text = "OK";
             this.cmdOk.UseSelectable = true;
+            this.cmdOk.Click += new System.EventHandler(this.cmdOk_Click);
             // 
             // Dialog
             // 

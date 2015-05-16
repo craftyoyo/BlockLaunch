@@ -153,17 +153,34 @@ namespace BlockLaunch.Classes.Minecraft
             
         }
 
+        [Obsolete]
         public static string GetPlayerName(string uuid)
         {
+            var profile = GetProfile(uuid);
+            if (profile != null)
+            {
+                var json = JsonConvert.DeserializeObject<UuidToProfile>(profile);
+                return json.Name;
+            }
+            return null;
+        }
+
+        public static UuidToProfile GetProfileInstance(string uuid)
+        {
+            return JsonConvert.DeserializeObject<UuidToProfile>(GetProfile(uuid));
+        }
+
+        public static string GetProfile(string uuid)
+        {
             string status;
+            uuid = uuid.Replace("-", "");
             var response = GetRequest("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid, out status);
             if (status != "OK")
             {
                 // Too many request (Only once per minute)
                 return null;
             }
-            var json = JsonConvert.DeserializeObject<UuidToProfile>(response);
-            return json.Name;
+            return response;
         }
 
         private static string GenerateClientToken()

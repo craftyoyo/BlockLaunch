@@ -27,6 +27,8 @@ namespace BlockLaunch.Classes.JSON
         [JsonProperty("memory")]
         public int Memory { get; set; }
         [JsonProperty("selectedProfile")]
+        public string SelectedProfileString { get; set; }
+        [JsonIgnore]
         public Profile SelectedProfile { get; set; }
     }
 

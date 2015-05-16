@@ -73,5 +73,10 @@ namespace BlockLaunch.UI.Dialogs
         {
             ThemeHelper.ApplyTheme(this, FrmMain.ApplicationConfig);
         }
+
+        private void cmdOk_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

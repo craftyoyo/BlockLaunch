@@ -19,7 +19,8 @@ namespace BuildHelper
             Directory.SetCurrentDirectory(mainDir);
             MoveWebkit(args);
             MoveTools(args);
-            MoveDlls(args);
+            MoveFiles(args, "*.dll");
+            Console.WriteLine("Success!");
         }
 
         public static void MoveTools(string[] args)
@@ -47,10 +48,10 @@ namespace BuildHelper
             }
         }
 
-        public static void MoveDlls(string[] args)
+        public static void MoveFiles(string[] args, string pattern)
         {
             var work = args[0] + @"\bin\" + args[1];
-            var dlls = Directory.GetFiles(work, "*.dll", SearchOption.TopDirectoryOnly);
+            var dlls = Directory.GetFiles(work, pattern, SearchOption.TopDirectoryOnly);
             foreach (var dll in dlls)
             {
                 var fi = new FileInfo(dll);
@@ -78,7 +79,6 @@ namespace BuildHelper
             var type = args[1];
             if (Directory.Exists(@"bin\" + type + @"\libs\webkit"))
             {
-                Console.WriteLine("Webkit already exists!");
                 return;
             }
             Directory.CreateDirectory(@"bin\" + type + @"\libs");

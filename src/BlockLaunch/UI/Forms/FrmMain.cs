@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using BlockLaunch.Classes;
 using BlockLaunch.Classes.JSON;
+using BlockLaunch.Classes.JSON.Api;
 using BlockLaunch.Classes.JSON.Login.Authentificate;
 using BlockLaunch.Classes.JSON.Login.Refresh;
 using BlockLaunch.Classes.Language;
@@ -26,6 +29,7 @@ namespace BlockLaunch.UI.Forms
 {
     public partial class FrmMain : MetroForm
     {
+        public const string SkinServer = "https://minotar.net/helm/{0}/64.png";
         #region Values
         public static BlockLaunchManager Manager = BlockLaunchManager.Instance;
         private static Config _config;
@@ -174,8 +178,7 @@ namespace BlockLaunch.UI.Forms
             message = Manager.LogMessage("Caching player name & loading profile image...", BlockLaunchManager.LogMode.Information, true,
                 ApplicationLanguage);
             AppendBlocklaunchLog(message);
-            var name = LoginManager.GetPlayerName(ApplicationConfig.SelectedProfile.Uuid);
-            LoadImage(name ?? ApplicationConfig.SelectedProfile.CachedUsername);
+            LoadImage(ApplicationConfig.SelectedProfile);
             SearchForUpdates(false);
             _initializing = false;
         }
@@ -191,11 +194,12 @@ namespace BlockLaunch.UI.Forms
                 CreateNewProfile();
                 profiles = Manager.LoadProfiles();
             }
+            AvailableProfiles = profiles;
+            FindAndSetProfile(ApplicationConfig.SelectedProfileString);
             if (ApplicationConfig.SelectedProfile == null)
             {
                 ApplicationConfig.SelectedProfile = profiles.First();
             }
-            AvailableProfiles = profiles;
             if (!ApplicationConfig.SavePassword && !_playerCachedForThisSession)
             {
                 var profile = ApplicationConfig.SelectedProfile;
@@ -225,7 +229,7 @@ namespace BlockLaunch.UI.Forms
                 }
             }
             ckbProfiles.SelectedValue = ApplicationConfig.SelectedProfile;
-            CachePlayerName(ApplicationConfig.SelectedProfile);
+            CacheProfile(ApplicationConfig.SelectedProfile);
             SelectProfile(ApplicationConfig.SelectedProfile);
             Manager.SaveProfiles(AvailableProfiles);
         }
@@ -284,9 +288,9 @@ namespace BlockLaunch.UI.Forms
             AvailableProfiles.Add(login.UserProfile);
             var data = new ProfileData(login.UserProfile.ProfileName, login.UserProfile);
             ProfileSource.Add(data);
-            ApplicationConfig.SelectedProfile = login.UserProfile;
-            if (OnProfileChanged != null) OnProfileChanged();
+            CacheProfile(login.UserProfile);
             SelectProfile(login.UserProfile);
+            if (OnProfileChanged != null) OnProfileChanged();
             Manager.SaveProfiles(AvailableProfiles);
         }
 
@@ -306,15 +310,16 @@ namespace BlockLaunch.UI.Forms
             AvailableProfiles.Add(login.UserProfile);
             var data = new ProfileData(login.UserProfile.ProfileName, login.UserProfile);
             ProfileSource.Add(data);
-            ApplicationConfig.SelectedProfile = login.UserProfile;
-            if (OnProfileChanged != null) OnProfileChanged();
+            CacheProfile(login.UserProfile);
             SelectProfile(login.UserProfile);
+            if (OnProfileChanged != null) OnProfileChanged();
+          
             Manager.SaveProfiles(AvailableProfiles);
         }
 
         private void SelectProfile(Profile profile)
         {
-            if (!_playerCachedForThisSession) CachePlayerName(profile);
+            if (!_playerCachedForThisSession) CacheProfile(profile);
             if (!_dontChange)
             {
                 ckbProfiles.SelectedValue = profile;
@@ -332,7 +337,7 @@ namespace BlockLaunch.UI.Forms
             {
                 ckbVersions_SelectedIndexChanged(this, null);
             }
-            LoadImage(profile.CachedUsername);
+            LoadImage(profile);
             cmdLogin.Enabled = true;
         }
 
@@ -601,44 +606,40 @@ namespace BlockLaunch.UI.Forms
         #endregion
 
         #region Player-Management
-        private void LoadImage(string username)
+
+        private void LoadImage(Profile profile)
         {
             var downloader = new WebClient { Proxy = null };
-            var byteImage = downloader.DownloadData("http://achievecraft.com/tools/avatar/64/" + username + ".png");
+            var byteImage = downloader.DownloadData(string.Format(SkinServer, profile.CachedProfile.Name));
             var ms = new MemoryStream(byteImage);
-            var returnImage = Image.FromStream(ms);
-            ptbAvatar.Image = returnImage;
+            var skinImage = Image.FromStream(ms);
+            ms.Dispose();
+            ptbAvatar.Image = skinImage;
         }
 
-
-
-        private void CachePlayerName(Profile profile)
+        private void CacheProfile(Profile profile)
         {
-            if (_playerCachedForThisSession) return;
-            var result = LoginManager.GetPlayerName(profile.Uuid);
+            if (profile.CachedProfile != null) return;
+            var result = LoginManager.GetProfile(profile.Uuid);
             if (result != null)
             {
+                var resultInstance = JsonConvert.DeserializeObject<UuidToProfile>(result);
                 _playerCachedForThisSession = true;
+                profile.CachedProfile = resultInstance;
+                profile.CachedProfileString = Convert.ToBase64String(Encoding.UTF8.GetBytes(result));
             }
-        }
-
-        private string GetPlayerName(string uuid)
-        {
-            var result = LoginManager.GetPlayerName(uuid);
-            if (result != null)
+            else
             {
-                if (result != ApplicationConfig.SelectedProfile.CachedUsername)
+                if (profile.CachedProfileString != null)
                 {
-                    ApplicationConfig.SelectedProfile.CachedUsername = result;
-                    if (OnProfileChanged != null) OnProfileChanged();
-                    LoadImage(result);
-                    return result;
+                    var jsonString = Encoding.UTF8.GetString(Convert.FromBase64String(profile.CachedProfileString));      
+                    var resultInstance = JsonConvert.DeserializeObject<UuidToProfile>(jsonString);
+                    profile.CachedProfile = resultInstance;
+                    _playerCachedForThisSession = true;
                 }
-                return result;
             }
-
-            return ApplicationConfig.SelectedProfile.CachedUsername;
         }
+
         #endregion
 
         #region Login
@@ -967,7 +968,7 @@ namespace BlockLaunch.UI.Forms
 
         private void cmdShowUUID_Click(object sender, EventArgs e)
         {
-            var user = GetPlayerName(ApplicationConfig.SelectedProfile.Uuid);
+            var user = ApplicationConfig.SelectedProfile.CachedProfile.Name;
             var result = MessageBox.Show(
                 @"UUID: " + ApplicationConfig.SelectedProfile.Uuid + Environment.NewLine + ApplicationLanguage.Username + user + Environment.NewLine + Environment.NewLine +
                 ApplicationLanguage.CopyUuid, ApplicationLanguage.PlayerInformation, MessageBoxButtons.YesNo,
@@ -1005,13 +1006,7 @@ namespace BlockLaunch.UI.Forms
                 ckbVersions.SelectedIndex = 0;
                 return;
             }
-            ApplicationConfig.SelectedProfile.SelectedVersion = new Classes.JSON.Version
-            {
-                Id = version.Id,
-                ReleaseTime = version.ReleaseTime,
-                Time = version.Time,
-                Type = version.Type,
-            };
+            ApplicationConfig.SelectedProfile.SelectedVersion = version;
             if (OnProfileChanged != null) OnProfileChanged();
             lblCurrentVersion.Text = ApplicationLanguage.SelectedVersion.Replace("%game_ver", version.Type + " " + version.Id);
             Manager.SaveProfiles(AvailableProfiles);
@@ -1044,8 +1039,9 @@ namespace BlockLaunch.UI.Forms
                     ChangeProfile(ref profile);
                 }
             }
+            
+            CacheProfile(profile);
             ApplicationConfig.SelectedProfile = profile;
-            CachePlayerName(ApplicationConfig.SelectedProfile);
             _dontChange = true;
             SelectProfile(ApplicationConfig.SelectedProfile);
             Manager.SaveProfiles(AvailableProfiles);
@@ -1269,6 +1265,21 @@ namespace BlockLaunch.UI.Forms
                 SearchForUpdates(true);
             }
         }
+
+        private void FindAndSetProfile(string uuid)
+        {
+            var found = false;
+            foreach (var profile in AvailableProfiles.Where(p => p.Uuid == uuid))
+            {
+                ApplicationConfig.SelectedProfile = profile;
+                found = true;
+            }
+            if (!found)
+            {
+                ApplicationConfig.SelectedProfile = AvailableProfiles.First();
+            }
+        }
+
     }
     #region DataBinding-Classes
 
