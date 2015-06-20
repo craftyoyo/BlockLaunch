@@ -1,5 +1,7 @@
 # BlockLaunch
 
+### This project is temporarily abandoned. Sorry :(
+
 BlockLaunch is a powerful and easy Minecraft Launcher. Here are some features of it:
 
   - Supports Name-Changing
