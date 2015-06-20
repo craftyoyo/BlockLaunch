@@ -15,7 +15,6 @@
     "tabpage_logs_all": "Alle",
     "tabpage_logs_blocklaunch": "BlockLaunch",
     "tabpage_logs_minecraft": "Minecraft",
-    "tabpage_tools": "Werkzeuge",
 
     "welcome_back": "Willkommen zurück, %player :)",
     "selected_version": "Ausgewählte Version: %game_ver",
@@ -53,7 +52,7 @@
     "convert_selected_version": "Derzeit ausgewählte Version konvertieren",
     "browse": "Durchsuchen...",
     "path_to_jar": "Pfad zur JAR",
-    "install_optifine": "Optifine installieren"
+    "install_optifine": "Optifine installieren",
 
     // Error-Translation
     "crash_report": "Fehler-Bericht ",

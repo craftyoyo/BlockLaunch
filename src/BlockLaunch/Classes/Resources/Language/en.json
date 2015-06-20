@@ -47,7 +47,6 @@
     "profile_name": "Profile Name: ",
 
     // Tools-Translation
-    "tabpage_tools": "Tools",
     "converter": "BlockLaunch-Converter",
     "optifine_installer": "BlockLaunch-OptiFine Installer",
     "convert_selected_version": "Convert selected version",
